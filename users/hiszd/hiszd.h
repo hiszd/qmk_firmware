@@ -16,7 +16,6 @@
 #pragma once
 #include "quantum.h"
 #include "version.h"
-#include "eeprom.h"
 #include "process_records.h"
 
 #ifdef TAP_DANCE_ENABLE
@@ -34,12 +33,10 @@ uint16_t encoder_rotated_timer;
 #endif
 
 #define _QWERTY 0
-#define _DVORAK 1
-#define _COLEMAK 2
-#define _LOWER 3
-#define _RAISE 4
-#define _ADJUST 5
-#define _NUMPAD 6
+#define _RSTLNE 1
+#define _NUMPAD 2
+#define _GAMING 3
+
 
 // Shortcut Keys
 #define K_LOCK LGUI(LCTL(KC_Q)) // Locks screen on MacOS

@@ -1,4 +1,4 @@
-#include "ninjonas.h"
+#include "hiszd.h"
 
 //// BEGIN: Advanced Tap Dances
 int cur_dance (qk_tap_dance_state_t *state) {

@@ -2,11 +2,9 @@
 #include "hiszd.h"
 
 enum custom_keycodes {
-  // Layer Macros
-  QWERTY = SAFE_RANGE,
-  DVORAK,
-  COLEMAK,
   // Custom Macros
+  WSPL = SAFE_RANGE,
+  WSPR,
   M_XXX1,
   M_XXX2,
   M_XXX3,

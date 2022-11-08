@@ -1,4 +1,4 @@
-#include "ninjonas.h"
+#include "hiszd.h"
 
 #ifdef COMBO_ENABLE
 enum combo_events {

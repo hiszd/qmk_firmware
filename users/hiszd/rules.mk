@@ -8,7 +8,7 @@ LEADER_ENABLE = yes         # Enable Leader Key
 SRC += hiszd.c \
        process_records.c \
        tap_dances.c \
-			 matrix_scan.c
+       matrix_scan.c
 
 ifneq ("$(wildcard $(USER_PATH)/secrets.c)","")
     SRC += secrets.c

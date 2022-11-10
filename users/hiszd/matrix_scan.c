@@ -11,9 +11,8 @@ void matrix_scan_user(void) {
     leading = false;
     leader_end();
 
-    SEQ_ONE_KEY(KC_F) {
-      // Anything you can do in a macro.
-      SEND_STRING("QMK is awesome.");
+    SEQ_ONE_KEY(KC_LGUI) {
+      reset_keyboard();
     }
   }
 }

@@ -19,6 +19,10 @@
 // #define NO_ACTION_LAYER
 // #define NO_ACTION_TAPPING
 // #define NO_ACTION_ONESHOT
+//
+
+#define VENDOR_ID 0xAA96
+#define PRODUCT_ID 0xAAA9
 
 #define RGB_MATRIX_SPLIT \
     { 43, 43 }

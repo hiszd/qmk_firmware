@@ -4,10 +4,10 @@
 #endif
 #define TAPPING_TERM_PER_KEY
 
-// #ifdef LEADER_ENABLE
+#ifdef LEADER_ENABLE
 #define LEADER_TIMEOUT 500
 #define LEADER_PER_KEY_TIMING
-// #endif
+#endif
 
 #ifdef COMBO_ENABLE
 #    undef COMBO_COUNT
@@ -15,3 +15,6 @@
 #    define COMBO_COUNT 5
 #    define COMBO_TERM 60
 #endif
+
+#define RAW_USAGE_PAGE 0xFF90
+#define RAW_USAGE_ID 0x69

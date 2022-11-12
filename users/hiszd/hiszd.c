@@ -15,14 +15,27 @@
  */
 #include "hiszd.h"
 
-// layer_state_t layer_state_set_user(layer_state_t state) {
-    // return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
-// }
+typedef union {
+    uint32_t raw;
+    struct {
+        bool rstlne_enable : 1;
+    };
+} user_config_t;
+
+user_config_t user_config;
+
+bool init = 0;
 
 #ifdef RGBLIGHT_ENABLE
 extern rgblight_config_t rgblight_config;
 #endif
 void keyboard_post_init_user() {
+    user_config.raw = eeconfig_read_user();
+
+    if (user_config.rstlne_enable) {
+        layer_on(_RSTLNE);
+    }
+
 #ifdef RGBLIGHT_ENABLE
     // Cycles through the entire hue wheel and resetting to default color
     uint16_t default_hue = rgblight_config.hue;
@@ -36,4 +49,24 @@ void keyboard_post_init_user() {
     }
 #endif
     layer_state_set_user(layer_state);
+
+    init = 1;
 }
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (IS_LAYER_ON_STATE(state, _RSTLNE)) {
+        user_config.rstlne_enable = 1;
+        eeconfig_update_user(user_config.raw);
+    } else if(IS_LAYER_OFF_STATE(state, _RSTLNE) && init) {
+        user_config.rstlne_enable = 0;
+        eeconfig_update_user(user_config.raw);
+    }
+
+    return state;
+};
+
+void eeconfig_init_user(void) {  // EEPROM is getting reset!
+  user_config.raw = 0;
+  user_config.rstlne_enable = 0;
+  eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
+};

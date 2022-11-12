@@ -17,7 +17,9 @@ void matrix_scan_user(void) {
     };
     SEQ_TWO_KEYS(KC_P,KC_TAB) {
       send_string(P1);
-      // SEND_STRING(P1);
+    };
+    SEQ_TWO_KEYS(KC_P,KC_1) {
+      send_string(P2);
     };
   };
 };

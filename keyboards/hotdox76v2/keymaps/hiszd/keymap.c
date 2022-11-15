@@ -7,6 +7,7 @@
 #include "hiszd.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+// clang-format off
     /*
      * ┌──────┬───┬───┬───┬───┬───┬───┐                     ┌───┬───┬───┬───┬───┬───┬──────┐
      * │ `    │ 1 │ 2 │ 3 │ 4 │ 5 │WSL│                     │WSR│ 6 │ 7 │ 8 │ 9 │ 0 │    - │
@@ -144,4 +145,5 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             KC_TRNS, KC_TRNS, KC_TRNS,            KC_TRNS, KC_TRNS, KC_TRNS
     )
     */
+// clang-format on
 };

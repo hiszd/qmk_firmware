@@ -18,8 +18,6 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 case 1:
                     layer_on(*data1);
                     return;
-                case 2:
-                    rgb_matrix_sethsv_noeeprom(HSV_GREEN);
             }
             break;
         // lighting functions

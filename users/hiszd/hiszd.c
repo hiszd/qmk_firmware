@@ -61,7 +61,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     if (IS_LAYER_ON_STATE(state, _RSTLNE)) {
         user_config.rstlne_enable = 1;
         eeconfig_update_user(user_config.raw);
-    } else if(IS_LAYER_OFF_STATE(state, _RSTLNE) && init) {
+    } else if (IS_LAYER_OFF_STATE(state, _RSTLNE) && init) {
         user_config.rstlne_enable = 0;
         eeconfig_update_user(user_config.raw);
     }
@@ -69,8 +69,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 };
 
-void eeconfig_init_user(void) {  // EEPROM is getting reset!
-  user_config.raw = 0;
-  user_config.rstlne_enable = 0;
-  eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
+void eeconfig_init_user(void) { // EEPROM is getting reset!
+    user_config.raw           = 0;
+    user_config.rstlne_enable = 0;
+    eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
 };

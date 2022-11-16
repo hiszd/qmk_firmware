@@ -1,12 +1,12 @@
 #ifdef TAPPING_TERM
 #    undef TAPPING_TERM
-#    define TAPPING_TERM 200
+#    define TAPPING_TERM 120
 #endif
 #define TAPPING_TERM_PER_KEY
 
 #ifdef LEADER_ENABLE
-#define LEADER_TIMEOUT 500
-#define LEADER_PER_KEY_TIMING
+#    define LEADER_TIMEOUT 500
+#    define LEADER_PER_KEY_TIMING
 #endif
 
 #ifdef COMBO_ENABLE

@@ -48,6 +48,10 @@ void keyboard_post_init_user() {
         wait_ms(10);
     }
 #endif
+#ifdef RGB_MATRIX_ENABLE
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    rgb_matrix_sethsv_noeeprom(HSV_RED);
+#endif
     layer_state_set_user(layer_state);
 
     init = 1;

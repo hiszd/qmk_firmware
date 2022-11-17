@@ -14,9 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
+#include <stdint.h>
 #include "quantum.h"
 #include "process_records.h"
 #include "raw_hid.h"
+
+void matrix_set_color_all(uint8_t r, uint8_t g, uint8_t b);
 
 #ifdef TAP_DANCE_ENABLE
 #    include "tap_dances.h"

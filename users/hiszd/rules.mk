@@ -8,7 +8,9 @@ RAW_ENABLE = yes
 
 SRC += hiszd.c \
        process_records.c \
+       transport_sync.c \
        raw_hid.c \
+       rgb_mat.c \
        matrix_scan.c
 
 ifneq ("$(wildcard $(USER_PATH)/secrets.c)","")

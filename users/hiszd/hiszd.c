@@ -14,7 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "hiszd.h"
+#include "transport_sync.h"
 #include <stdint.h>
+#include "rgb_mat.h"
 
 typedef union {
     uint32_t raw;
@@ -27,12 +29,6 @@ user_config_t user_config;
 
 bool init = 0;
 
-void matrix_set_color_all(uint8_t r, uint8_t g, uint8_t b) {
-    for (int i = 0; i < (DRIVER_LED_TOTAL + 10); i++) {
-        rgb_matrix_set_color(i, r, g, b);
-    }
-}
-
 #ifdef RGBLIGHT_ENABLE
 extern rgblight_config_t rgblight_config;
 #endif
@@ -42,6 +38,8 @@ void keyboard_post_init_user() {
     if (user_config.rstlne_enable) {
         layer_on(_RSTLNE);
     }
+
+    keyboard_post_init_transport_sync();
 
 #ifdef RGBLIGHT_ENABLE
     // Cycles through the entire hue wheel and resetting to default color
@@ -59,11 +57,10 @@ void keyboard_post_init_user() {
     rgb_matrix_enable_noeeprom();
     rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
     rgb_matrix_set_flags(LED_FLAG_NONE);
-    matrix_set_color_all(0xFF, 0x00, 0x00);
-    // for (int i = 67; i <= 81; i++) {
-    // rgb_matrix_set_color(i, r, g, b);
-    // }
+    // rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+    // rgb_matrix_set_flags(LED_FLAG_ALL);
     // rgb_matrix_sethsv_noeeprom(HSV_RED);
+    // rgb_matrix_set_color(10, 0, 0, 220);
 #endif
     layer_state_set_user(layer_state);
 

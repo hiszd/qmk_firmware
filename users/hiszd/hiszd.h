@@ -19,8 +19,6 @@
 #include "process_records.h"
 #include "raw_hid.h"
 
-void matrix_set_color_all(uint8_t r, uint8_t g, uint8_t b);
-
 #ifdef TAP_DANCE_ENABLE
 #    include "tap_dances.h"
 #endif
@@ -34,6 +32,8 @@ bool     left_encoder_rotated;
 bool     right_encoder_rotated;
 uint16_t encoder_rotated_timer;
 #endif
+
+// #define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS
 
 #define _QWERTY 0
 #define _RSTLNE 1

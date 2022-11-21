@@ -44,7 +44,7 @@ void housekeeping_task_user(void) {
             if (transaction_rpc_exec(HISZD_SYNC_LIGHTS, sizeof(m2s_overall), &m2s_overall, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
                 dprintf("Slave sync success!\n");
-                // m2s_go = false;
+                m2s_go = false;
                 if (!s2m.success) {
                     syncfail = true;
                 } else {

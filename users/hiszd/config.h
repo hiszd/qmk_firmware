@@ -22,6 +22,6 @@
 #define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS
 
 // Master to slave:
-#define RPC_M2S_BUFFER_SIZE 130
+#define RPC_M2S_BUFFER_SIZE 132
 // Slave to master:
-#define RPC_S2M_BUFFER_SIZE 130
+#define RPC_S2M_BUFFER_SIZE 132

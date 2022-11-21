@@ -9,6 +9,7 @@ typedef struct _rgb_led {
 
 typedef struct _master_to_slave_t {
     rgb_led led[43];
+    uint8_t checksum;
 } master_to_slave_t;
 
 typedef struct _slave_to_master_t {

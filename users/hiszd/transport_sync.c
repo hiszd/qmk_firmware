@@ -2,15 +2,21 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "transactions.h"
+#include "crc.h"
 
 master_to_slave_t m2s_overall;
-bool              m2s_go = false;
+int               ledsize   = sizeof m2s_overall.led / sizeof m2s_overall.led[0];
+bool              m2s_go    = false;
+bool              m2s_ready = false;
+bool              syncfail  = false;
 
 void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
     const master_to_slave_t* m2s = (const master_to_slave_t*)in_data;
-    for (int n = 0; n < 43; n++) {
-        rgb_matrix_set_color(n + 43, m2s->led[n].r, m2s->led[n].g, m2s->led[n].b);
-        // rgb_matrix_set_color(43, m2s->led[1].r, m2s->led[1].g, m2s->led[1].b);
+    if (m2s->checksum == crc8(m2s->led, sizeof(m2s->led))) {
+        for (int n = 0; n < ledsize; n++) {
+            rgb_matrix_set_color(n + 43, m2s->led[n].r, m2s->led[n].g, m2s->led[n].b);
+        }
+    } else {
     }
 }
 
@@ -22,13 +28,31 @@ void housekeeping_task_user(void) {
     if (is_keyboard_master()) {
         // Interact with slave every 500ms
         static uint32_t last_sync = 0;
-        if (timer_elapsed32(last_sync) > 500 && m2s_go) {
-            if (transaction_rpc_send(HISZD_SYNC_LIGHTS, sizeof(m2s_overall), &m2s_overall)) {
+        if (!m2s_ready) {
+            for (int n = 0; n < 43; n++) {
+                if (n < 48) {
+                    m2s_overall.led[n] = (rgb_led){r : 1, g : 1, b : 1};
+                } else {
+                    m2s_overall.led[n] = (rgb_led){r : 0, g : 0, b : 0};
+                }
+                m2s_ready = true;
+            }
+        }
+        if ((timer_elapsed32(last_sync) > 500 && m2s_go) || syncfail == true) {
+            m2s_overall.checksum  = crc8(m2s_overall.led, sizeof(m2s_overall.led));
+            slave_to_master_t s2m = {0};
+            if (transaction_rpc_exec(HISZD_SYNC_LIGHTS, sizeof(m2s_overall), &m2s_overall, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
                 dprintf("Slave sync success!\n");
                 // m2s_go = false;
+                if (!s2m.success) {
+                    syncfail = true;
+                } else {
+                    syncfail = false;
+                }
             } else {
                 dprint("Slave sync failed!\n");
+                syncfail = true;
             }
         }
     }

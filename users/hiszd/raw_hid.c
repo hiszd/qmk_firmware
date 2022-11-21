@@ -14,10 +14,15 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     uint8_t *data2   = &(data[3]);
     uint8_t *data3   = &(data[4]);
     uint8_t *data4   = &(data[5]);
+    uint8_t *data5   = &(data[6]);
+    uint8_t *data6   = &(data[7]);
+    uint8_t *data7   = &(data[8]);
+    uint8_t *data8   = &(data[9]);
+    uint8_t *data9   = &(data[10]);
+    uint8_t *data10  = &(data[11]);
+    uint8_t *data11  = &(data[12]);
+    leddat_t leddata = {{*data4, *data5, *data6, *data7, *data8, *data9, *data10, *data11}};
     HSV      hsv     = rgb_matrix_get_hsv();
-    uint8_t  dat[RAW_EPSIZE];
-    // master_to_slave_t m2s = {*data1, *data2, *data3, *data4};
-    // master_to_slave_t m2s = {120, 255, 255, 44};
     switch (*reqtype) {
         // layer functions
         case 0:
@@ -39,14 +44,18 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 // This does not work on split keyboards
                 case 1:
                     rgb_matrix_set_flags(LED_FLAG_NONE);
-                    hiszd_matrix_set_color(*data4, *data1, *data2, *data3);
+                    hiszd_matrix_set_color(leddata, *data1, *data2, *data3);
                     return;
                 case 2:
                     rgb_matrix_sethsv_noeeprom(*data1, *data2, *data3);
-                    dat[0] = hsv.h;
-                    dat[1] = hsv.s;
-                    dat[2] = hsv.v;
-                    raw_hid_send(dat, RAW_EPSIZE);
+                    data[0] = hsv.h;
+                    data[1] = hsv.s;
+                    data[2] = hsv.v;
+                    raw_hid_send(data, RAW_EPSIZE);
+                    return;
+                case 3:
+                    hiszd_matrix_set_color_all(*data1, *data2, *data3);
+                    return;
                 default:
                     return;
             }

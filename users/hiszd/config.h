@@ -20,3 +20,8 @@
 #define RAW_USAGE_ID 0x69
 
 #define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS
+
+// Master to slave:
+#define RPC_M2S_BUFFER_SIZE 130
+// Slave to master:
+#define RPC_S2M_BUFFER_SIZE 130

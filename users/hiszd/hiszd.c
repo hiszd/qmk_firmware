@@ -15,6 +15,7 @@
  */
 #include "hiszd.h"
 #include "transport_sync.h"
+#include "oled/oled_stuff.h"
 #include <stdint.h>
 #include "rgb_mat.h"
 
@@ -57,14 +58,20 @@ void keyboard_post_init_user() {
     rgb_matrix_enable_noeeprom();
     rgb_matrix_mode_noeeprom(RGB_MATRIX_NONE);
     rgb_matrix_set_flags(LED_FLAG_NONE);
-    // rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    // rgb_matrix_set_flags(LED_FLAG_ALL);
-    // rgb_matrix_sethsv_noeeprom(HSV_RED);
-    // rgb_matrix_set_color(10, 0, 0, 220);
 #endif
     layer_state_set_user(layer_state);
 
+#if OLED_ENABLE
+    keyboard_post_init_oled();
+#endif
+
     init = 1;
+}
+
+void housekeeping_task_user(void) {
+    housekeeping_task_rgb();
+    housekeeping_task_oled();
+    return;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {

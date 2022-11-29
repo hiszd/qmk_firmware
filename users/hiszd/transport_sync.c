@@ -24,7 +24,7 @@ void keyboard_post_init_transport_sync(void) {
     transaction_register_rpc(HISZD_SYNC_LIGHTS, user_sync_a_slave_handler);
 }
 
-void housekeeping_task_user(void) {
+void housekeeping_task_rgb(void) {
     if (is_keyboard_master()) {
         // Interact with slave every 500ms
         static uint32_t last_sync = 0;

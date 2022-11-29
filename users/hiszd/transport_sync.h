@@ -23,4 +23,4 @@ void user_sync_a_slave_handler(uint8_t, const void*, uint8_t, void*);
 
 void keyboard_post_init_transport_sync(void);
 
-void housekeeping_task_user(void);
+void housekeeping_task_rgb(void);

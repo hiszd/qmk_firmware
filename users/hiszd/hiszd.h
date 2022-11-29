@@ -15,9 +15,15 @@
  */
 #pragma once
 #include <stdint.h>
-#include "quantum.h"
+#include "../../quantum/quantum.h"
 #include "process_records.h"
 #include "raw_hid.h"
+
+#ifdef OLED_ENABLE
+#    define NOIZ_LOGO
+#    include "oled/noiz_logo.h"
+#    include "oled/drashna_font.h"
+#endif
 
 #ifdef TAP_DANCE_ENABLE
 #    include "tap_dances.h"
@@ -106,7 +112,7 @@ uint16_t encoder_rotated_timer;
 
 #define _____________________NUMPAD_1_______________________ KC_TRNS, KC_P7, KC_P8, KC_P9, KC_TRNS, KC_F12
 #define _____________________NUMPAD_2_______________________ KC_TRNS, KC_P4, KC_P5, KC_P6, KC_TRNS, KC_TRNS
-#define _____________________NUMPAD_3_______________________ KC_TRNS, KC_P1, KC_P2, KC_P3, KC_TRNS, KC_TRNS
+#define _____________________NUMPAD_3_______________________ KC_TRNS, KC_P1, KC_P2, KC_P3, KC_TRNS, KC_NUM
 #define _____________________NUMPAD_4_______________________ KC_P0, KC_DOT, KC_P0, KC_TRNS, KC_TRNS
 
 #define _____________MOD_LEFT_____________ KC_GRV, KC_DEL, KC_UP, KC_DOWN, LALT_T(KC_RBRC)

@@ -17,7 +17,7 @@
 #endif
 
 #ifdef OLED_ENABLE
-#    define OLED_TIMEOUT 1000
+#    define OLED_TIMEOUT 5000
 #    define OLED_FADE_OUT
 #    define OLED_FADE_OUT_INTERVAL 0
 #endif

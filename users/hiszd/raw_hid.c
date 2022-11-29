@@ -3,6 +3,7 @@
 #include "color.h"
 #include "stdint.h"
 #include "hiszd.h"
+#include "oled/oled_stuff.h"
 #include "transactions.h"
 #include "transport_sync.h"
 #include "rgb_mat.h"
@@ -59,6 +60,21 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 default:
                     return;
             }
+        case 2:
+            // hidmsg[0] = (char)*command;
+            // hidmsg[1] = (char)*data1;
+            // hidmsg[2] = (char)*data2;
+            // hidmsg[3] = (char)*data3;
+            // hidmsg[4] = (char)*data4;
+            // hidmsg[5] = (char)*data5;
+            // hidmsg[6] = (char)*data6;
+            hidmsg[0] = 'B';
+            hidmsg[1] = 'o';
+            hidmsg[2] = 'b';
+            hidmsg[3] = 'b';
+            hidmsg[4] = 'y';
+            hidmsg[5] = ' ';
+            return;
         case 99:
             reset_keyboard();
             return;

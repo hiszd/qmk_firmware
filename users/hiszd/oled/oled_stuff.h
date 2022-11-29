@@ -19,6 +19,9 @@ slave_to_master_oled_t s2m;
 char oled_left[2][7];
 #endif
 
+bool process_record_oled(uint16_t, keyrecord_t *);
+void matrix_scan_oled(void);
+
 void housekeeping_task_oled(void);
 void keyboard_post_init_oled(void);
 

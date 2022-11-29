@@ -1,4 +1,5 @@
 #include "oled_stuff.h"
+#include "matrix_scan.h"
 #include "oled_driver.h"
 #include "transactions.h"
 #include <stdint.h>
@@ -7,53 +8,59 @@
 #include "noiz_logo.h"
 #include "ext_big_font.h"
 
+#define OLED_LAYER_CONST "Layer ["
+#define OLED_INDS_CONST "Inds  ["
+
+static uint32_t oled_timeout;
+uint32_t        oled_scan;
+
 bool oled_task_user(void) {
-    oled_set_cursor(0, 0);
+    oled_set_cursor(5, 0);
+    if (is_oled_on()) {
 #ifdef SPLIT_KEYBOARD
-    if (is_keyboard_left()) {
-        render_logo();
-        // oled_write_ln_P(PSTR("ZION"), false);
-        // render_left();
-    } else {
-        // render_right();
-        // oled_write_ln_P(logo_noiz, false);
-    }
+        if (is_keyboard_left()) {
+            render_logo();
+            render_left();
+        } else {
+            render_logo();
+            render_right();
+        }
 #else
-    // oled_write_ln_P(logo_noiz, false);
-    // render_left();
+        // oled_write_ln_P(logo_noiz, false);
+        // render_left();
 #endif
+    }
     return false;
 }
 
 void render_logo(void) {
-    oled_set_cursor(0, 0);
-    uint8_t page = 0;
-    for (int s = 0; s < sizeof(logo_noiz); s++) {
-        oled_write_raw(&logo_noiz[s], 1);
-        // oled_write(logo_noiz, false);
-        if (s > ((sizeof(logo_noiz) / 4) * page)) {
-            page++;
-            oled_set_cursor(0, page);
+    uint8_t i = 0, j = 0;
+    for (i = 0; i < 4; ++i) {
+        for (j = 0; j < 32; ++j) {
+            if (is_keyboard_left()) {
+                oled_write_raw_byte(pgm_read_byte(&logo_noiz[i * 32 + j]), i * 128 + j);
+            } else {
+                oled_write_raw_byte(pgm_read_byte(&logo_noiz[i * 32 + j]), i * 128 + j + 96);
+            }
         }
     }
 }
 
-void render_left_helper_fun(uint8_t start_line, const char *data, uint8_t gap_w, uint8_t l) {
-    uint8_t j = 0, k = 0;
-    for (j = 0; j < l; ++j) {      // font index
-        for (k = 0; k < 12; ++k) { // font byte index
-            //                                        base + logo_w(32) + gap_w(12) +l*font_w(12)+current_byte_index
-            oled_write_raw_byte(pgm_read_byte(&ext_big_font[pgm_read_byte(&data[j]) - 0x21][k]), start_line * 2 * 128 + 32 + gap_w + j * 12 + k);
-            oled_write_raw_byte(pgm_read_byte(&ext_big_font[pgm_read_byte(&data[j]) - 0x21][k + 12]), start_line * 2 * 128 + 128 + 32 + gap_w + j * 12 + k);
-        }
-    }
-    for (j = 0; j < gap_w; ++j) {
-        oled_write_raw_byte(pgm_read_byte(&blank_block), start_line * 2 * 128 + 32 + j);
-        oled_write_raw_byte(pgm_read_byte(&blank_block), start_line * 2 * 128 + 32 + gap_w + l * 12 + j);
-
-        oled_write_raw_byte(pgm_read_byte(&blank_block), start_line * 2 * 128 + 128 + 32 + j);
-        oled_write_raw_byte(pgm_read_byte(&blank_block), start_line * 2 * 128 + 128 + 32 + gap_w + l * 12 + j);
-    }
+void render_left_helper_fun(uint8_t start_line) {
+    //                                        base + logo_w(32) + gap_w(12) +l*font_w(12)+current_byte_index
+    oled_set_cursor(start_line, 0);
+    oled_write_P(PSTR(OLED_LAYER_CONST), false);
+    oled_write_P(IS_LAYER_ON(1) ? PSTR("2") : PSTR(" "), false);
+    oled_write_P(IS_LAYER_ON(2) ? PSTR(" 3") : PSTR("  "), false);
+    oled_write_P(IS_LAYER_ON(3) ? PSTR(" 4") : PSTR("  "), false);
+    oled_write_P(PSTR("]"), false);
+    led_t led_state = host_keyboard_led_state();
+    oled_set_cursor(start_line, 1);
+    oled_write_P(PSTR(OLED_INDS_CONST), false);
+    oled_write_P(led_state.num_lock ? PSTR("N") : PSTR(" "), false);
+    oled_write_P(led_state.caps_lock ? PSTR(" C") : PSTR("  "), false);
+    oled_write_P(leader_on ? PSTR(" L") : PSTR("  "), false);
+    oled_write_P(PSTR("]"), false);
 }
 
 void render_right_helper_fun(uint8_t start_line, const char *data, uint8_t gap_w, uint8_t l) {
@@ -86,62 +93,10 @@ void render_right(void) {
 }
 
 void render_left() {
-    uint8_t layer = get_highest_layer(layer_state);
-    render_left_helper_fun(0, PSTR("LAYER:"), 12, 6);
-    switch (layer) {
-        case 0:
-            render_left_helper_fun(1, PSTR("1:HOME"), 12, 6);
-            break;
-        case 1:
-            render_left_helper_fun(1, PSTR("2:CODE"), 12, 6);
-            break;
-        case 2:
-            render_left_helper_fun(1, PSTR("3:OFFICE"), 0, 8);
-            break;
-        case 3:
-        default:
-            render_left_helper_fun(1, PSTR("4:OTHERS"), 0, 8);
-            break;
-    }
+    render_left_helper_fun(5);
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    strcpy((char *)(oled_left[0]), "[    ]");
-    oled_left[0][0] = UNC;
-    oled_left[0][1] = UNC;
-    oled_left[0][2] = UNC;
-    oled_left[0][3] = UNC;
-    oled_left[0][4] = UNC;
-    oled_left[0][5] = UNC;
-    oled_left[0][6] = UNC;
-    strcpy((char *)(oled_left[1]), "[    ]");
-    oled_left[1][0] = UNC;
-    oled_left[1][1] = UNC;
-    oled_left[1][2] = UNC;
-    oled_left[1][3] = UNC;
-    oled_left[1][4] = UNC;
-    oled_left[1][5] = UNC;
-    oled_left[1][6] = UNC;
-
-#if defined(KEYBOARD_hotdox76v2)
-    strcpy((char *)(oled_right[0]), "[    ]");
-    oled_right[0][0] = UNC;
-    oled_right[0][1] = UNC;
-    oled_right[0][2] = UNC;
-    oled_right[0][3] = UNC;
-    oled_right[0][4] = UNC;
-    oled_right[0][5] = UNC;
-    oled_right[0][6] = UNC;
-    strcpy((char *)(oled_right[1]), "[    ]");
-    oled_right[1][0] = UNC;
-    oled_right[1][1] = UNC;
-    oled_right[1][2] = UNC;
-    oled_right[1][3] = UNC;
-    oled_right[1][4] = UNC;
-    oled_right[1][5] = UNC;
-    oled_right[1][6] = UNC;
-#endif
-
 #if defined(SPLIT_KEYBOARD)
     if (is_keyboard_left()) {
         return OLED_ROTATION_180;
@@ -150,6 +105,31 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     }
 #else
     return OLED_ROTATION_180;
+#endif
+}
+
+bool process_record_oled(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        if (is_oled_on()) {
+            oled_scan = 400;
+        } else {
+            oled_on();
+        }
+        oled_timeout = timer_read32();
+    }
+    return true;
+}
+
+void matrix_scan_oled(void) {
+#if defined(OLED_TIMEOUT) && !defined(OLED_SCROLL_TIMEOUT)
+    if (is_oled_on() && timer_elapsed32(oled_timeout) > OLED_TIMEOUT) {
+        oled_off();
+    }
+#endif
+#if defined(OLED_TIMEOUT) && defined(OLED_SCROLL_TIMEOUT)
+    if (is_oled_on() && timer_elapsed32(oled_timeout) > OLED_TIMEOUT) {
+        oled_scan = 5000;
+    }
 #endif
 }
 
@@ -163,12 +143,12 @@ void keyboard_post_init_oled(void) {
 
 void housekeeping_task_oled(void) {
     if (is_keyboard_master()) {
-        // Interact with slave every 200ms
+        // Interact with slave every 400ms
         static uint32_t last_sync = 0;
-        if (timer_elapsed32(last_sync) > 200) {
+        if (timer_elapsed32(last_sync) > oled_scan) {
             if (transaction_rpc_exec(NOIZ_OLED_SYNC, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
-                dprint("Slave sync successed!\n");
+                dprint("Slave sync succeded!\n");
             } else {
                 dprint("Slave sync failed!\n");
             }

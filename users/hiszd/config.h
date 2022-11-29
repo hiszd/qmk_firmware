@@ -16,6 +16,12 @@
 #    define COMBO_TERM 60
 #endif
 
+#ifdef OLED_ENABLE
+#    define OLED_TIMEOUT 1000
+#    define OLED_FADE_OUT
+#    define OLED_FADE_OUT_INTERVAL 0
+#endif
+
 #define RAW_USAGE_PAGE 0xFF90
 #define RAW_USAGE_ID 0x69
 

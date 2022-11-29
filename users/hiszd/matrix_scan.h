@@ -1,5 +1,8 @@
-#pragma once
 #include "hiszd.h"
+
+#pragma once
+
+extern bool leader_on;
 
 bool matrix_scan_user_keymap(void);
 

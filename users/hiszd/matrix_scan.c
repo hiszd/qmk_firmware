@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "hiszd.h"
+#include "oled/oled_stuff.h"
 #include "secrets.h"
 #include "rgb_mat.h"
 
@@ -26,6 +27,8 @@ void matrix_scan_user(void) {
             send_string(P2);
         };
     };
+
+    matrix_scan_oled();
 };
 
 void leader_start() {

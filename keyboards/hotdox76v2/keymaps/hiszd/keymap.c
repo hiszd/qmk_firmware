@@ -27,13 +27,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      */
     [_QWERTY] = LAYOUT_ergodox_pretty_wrapper(
         KC_EQL, __________________NUM_LEFT____________________,  WSPL,            WSPR,   __________________NUM_RIGHT___________________,KC_MINS,
-        KC_TAB, __________________QWERTY_L1___________________,KC_EQL,            KC_LEAD,__________________QWERTY_R1___________________,KC_BSLS,
+        KC_TAB, __________________QWERTY_L1___________________,KC_EQL,            KC_LEAD,__________________QWERTY_R1___________________,KC_BSPC,
         MT_CTL, __________________QWERTY_L2___________________,                           __________________QWERTY_R2___________________,KC_QUOT,
         KC_LSPO,__________________QWERTY_L3___________________,KC_MINS,           TG_GAM, __________________QWERTY_R3___________________,KC_RSPC,
                 _____________MOD_LEFT_____________,                                                   _____________MOD_RIGHT____________,
                                                      KC_HOME, KC_END,             KC_PGUP, KC_PGDN,
                                                               KC_TRNS,            KC_CAPS,
-                                            KC_SPC,  KC_UNDS, KC_LGUI,            TG_RST,  KC_BSPC, KC_ENT
+                                            KC_SPC,  KC_UNDS, KC_LGUI,            TG_RST,  KC_BSLS, KC_ENT
     ),
     /*
      * ┌──────┬───┬───┬───┬───┬───┬───┐                     ┌───┬───┬───┬───┬───┬───┬──────┐

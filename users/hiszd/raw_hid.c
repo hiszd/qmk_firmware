@@ -11,18 +11,12 @@
 void raw_hid_receive(uint8_t *data, uint8_t length) {
     uint8_t *reqtype = &(data[0]);
     uint8_t *command = &(data[1]);
+    uint8_t *dat     = {0};
+    strncpy((char *)dat, (const char *)&data + 2, 15);
     uint8_t *data1   = &(data[2]);
     uint8_t *data2   = &(data[3]);
     uint8_t *data3   = &(data[4]);
-    uint8_t *data4   = &(data[5]);
-    uint8_t *data5   = &(data[6]);
-    uint8_t *data6   = &(data[7]);
-    uint8_t *data7   = &(data[8]);
-    uint8_t *data8   = &(data[9]);
-    uint8_t *data9   = &(data[10]);
-    uint8_t *data10  = &(data[11]);
-    uint8_t *data11  = &(data[12]);
-    leddat_t leddata = {{*data4, *data5, *data6, *data7, *data8, *data9, *data10, *data11}};
+    leddat_t leddata = {{dat[4], dat[5], dat[6], dat[7], dat[8], dat[9], dat[10], dat[11]}};
     HSV      hsv     = rgb_matrix_get_hsv();
     switch (*reqtype) {
         // layer functions
@@ -61,19 +55,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                     return;
             }
         case 2:
-            // hidmsg[0] = (char)*command;
-            // hidmsg[1] = (char)*data1;
-            // hidmsg[2] = (char)*data2;
-            // hidmsg[3] = (char)*data3;
-            // hidmsg[4] = (char)*data4;
-            // hidmsg[5] = (char)*data5;
-            // hidmsg[6] = (char)*data6;
-            hidmsg[0] = 'B';
-            hidmsg[1] = 'o';
-            hidmsg[2] = 'b';
-            hidmsg[3] = 'b';
-            hidmsg[4] = 'y';
-            hidmsg[5] = ' ';
+            hid_msg(data, 0);
             return;
         case 99:
             reset_keyboard();

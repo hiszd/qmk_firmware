@@ -2,14 +2,14 @@
 #include <stdbool.h>
 #include "transport_sync.h"
 
-void hiszd_matrix_set_color(leddat_t leds, uint8_t red, uint8_t green, uint8_t blue) {
+void hiszd_matrix_set_color(uint8_t *leds, uint8_t ledslen, uint8_t red, uint8_t green, uint8_t blue) {
     bool hasplit;
-    for (int index = 0; index < 8; index++) {
-        if (leds.led[index] >= 43 && leds.led[index] < DRIVER_LED_TOTAL) {
-            m2s_overall.led[leds.led[index] - 43] = (rgb_led){r : red, g : green, b : blue};
-            hasplit                               = true;
+    for (uint8_t index = 0; index < ledslen; index++) {
+        if (leds[index] >= 43 && leds[index] < DRIVER_LED_TOTAL) {
+            m2s_overall.led[leds[index] - 43] = (rgb_led){r : red, g : green, b : blue};
+            hasplit                           = true;
         } else {
-            rgb_matrix_set_color(leds.led[index], red, green, blue);
+            rgb_matrix_set_color(leds[index], red, green, blue);
         }
     }
     if (hasplit) {

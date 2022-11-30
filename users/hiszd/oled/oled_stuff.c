@@ -13,17 +13,17 @@
 #define OLED_MESG_CONST "Message: "
 
 #if defined(KEYBOARD_hotdox76v2)
-char oled_left[2][15];
-char oled_right[2][15];
+uint8_t oled_left[2][20];
+uint8_t oled_right[2][20];
 
 master_to_slave_oled_t oled_m2s;
 
 typedef struct _slave_to_master_oled_t {
-    char current_slave[2][15];
+    bool leader_on;
 } slave_to_master_oled_t;
 slave_to_master_oled_t s2m;
 #else
-char oled_left[2][15];
+uint8_t oled_left[2][20];
 #endif
 
 static uint32_t oled_timeout = OLED_TIMEOUT;
@@ -62,8 +62,7 @@ void render_logo(void) {
     }
 }
 
-void render_left_helper_fun(uint8_t start_col) {
-    //                                        base + logo_w(32) + gap_w(12) +l*font_w(12)+current_byte_index
+void render_right_helper_fun(uint8_t start_col) {
     oled_set_cursor(start_col, 0);
     oled_write_P(PSTR(OLED_LAYER_CONST), false);
     oled_write_P(IS_LAYER_ON(1) ? PSTR("2") : PSTR(" "), false);
@@ -75,36 +74,34 @@ void render_left_helper_fun(uint8_t start_col) {
     oled_write_P(PSTR(OLED_INDS_CONST), false);
     oled_write_P(led_state.num_lock ? PSTR("N") : PSTR(" "), false);
     oled_write_P(led_state.caps_lock ? PSTR(" C") : PSTR("  "), false);
-    oled_write_P(leader_on ? PSTR(" L") : PSTR("  "), false);
+    if (is_keyboard_master()) {
+        oled_write_P(leader_on ? PSTR(" L") : PSTR("  "), false);
+    } else {
+        oled_write_P(s2m.leader_on ? PSTR(" L") : PSTR("  "), false);
+    }
     oled_write_P(PSTR("]"), false);
 }
 
-void render_right_helper_fun(uint8_t start_col, const char *data, uint8_t max_col) {
-    if (data[0] != 0x00) {
-        oled_set_cursor(start_col, 0);
-        oled_write_P(PSTR(OLED_MESG_CONST), false);
-        oled_set_cursor(start_col, 1);
-        oled_write(data, false);
-    }
+void render_left_helper_fun(uint8_t start_col, uint8_t max_col) {
+    // if (oled_left[0][0] != 0x00) {
+    oled_set_cursor(start_col, 0);
+    oled_write_P(PSTR(OLED_MESG_CONST), false);
+    oled_set_cursor(start_col, 1);
+    oled_write((const char *)oled_left[0], false);
+    // }
 }
 
 void render_right(void) {
-    if (is_keyboard_master()) {
-        render_right_helper_fun(0, (const char *)oled_right[0], 12);
-    } else {
-        render_right_helper_fun(0, (const char *)s2m.current_slave[0], 12);
-    }
-    return;
+    render_right_helper_fun(0);
 }
 
-void hid_msg(uint8_t *data, uint8_t ind) {
-    for (uint8_t i = 2; i < 15; i++) {
-        oled_m2s.current_slave[ind][i] = data[i];
-    }
+void hid_msg(uint8_t data[20], uint8_t size, uint8_t ind) {
+    // memset(oled_left[ind], 0x00, sizeof(uint8_t[20]));
+    memcpy(oled_left[ind], data, sizeof(uint8_t[size]));
 }
 
 void render_left() {
-    render_left_helper_fun(5);
+    render_left_helper_fun(5, 12);
 }
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -147,8 +144,7 @@ void matrix_scan_oled(void) {
 
 void noiz_sync_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data) {
     const master_to_slave_oled_t *m2s = (const master_to_slave_oled_t *)in_data;
-    memcpy(s2m.current_slave[0], m2s->current_slave[0], 7);
-    memcpy(s2m.current_slave[1], m2s->current_slave[1], 7);
+    s2m.leader_on                     = m2s->leader_on;
 }
 
 void keyboard_post_init_oled(void) {
@@ -160,6 +156,7 @@ void housekeeping_task_oled(void) {
         // Interact with slave every 400ms
         static uint32_t last_sync = 0;
         if (timer_elapsed32(last_sync) > oled_scan) {
+            oled_m2s.leader_on = leader_on;
             if (transaction_rpc_exec(NOIZ_OLED_SYNC, sizeof(oled_m2s), &oled_m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
                 dprint("Slave sync succeded!\n");

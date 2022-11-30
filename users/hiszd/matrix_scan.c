@@ -40,45 +40,45 @@ void leader_end() {
 }
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    leddat_t LED = {{255, 255, 255, 255, 255, 255, 255, 255}};
+    uint8_t led[1];
 #if defined(LED_LAY1) && defined(LED_LAY1_COL)
-    LED.led[0] = LED_LAY1;
+    led[0] = LED_LAY1;
     if (layer_state_is(0)) {
-        hiszd_matrix_set_color(LED, LED_LAY1_COL);
+        hiszd_matrix_set_color(led, 1, LED_LAY1_COL);
     } else {
-        hiszd_matrix_set_color(LED, 0, 0, 0);
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
     }
 #endif
 #if defined(LED_LAY2) && defined(LED_LAY2_COL)
-    LED.led[0] = LED_LAY2;
+    led[0] = LED_LAY2;
     if (layer_state_is(1)) {
-        hiszd_matrix_set_color(LED, LED_LAY2_COL);
+        hiszd_matrix_set_color(led, 1, LED_LAY2_COL);
     } else {
-        hiszd_matrix_set_color(LED, 0, 0, 0);
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
     }
 #endif
 #if defined(LED_LAY3) && defined(LED_LAY3_COL)
-    LED.led[0] = LED_LAY3;
+    led[0] = LED_LAY3;
     if (layer_state_is(2)) {
-        hiszd_matrix_set_color(LED, LED_LAY3_COL);
+        hiszd_matrix_set_color(led, 1, LED_LAY3_COL);
     } else {
-        hiszd_matrix_set_color(LED, 0, 0, 0);
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
     }
 #endif
 #if defined(LED_LAY4) && defined(LED_LAY4_COL)
-    LED.led[0] = LED_LAY4;
+    led[0] = LED_LAY4;
     if (layer_state_is(3)) {
-        hiszd_matrix_set_color(LED, LED_LAY4_COL);
+        hiszd_matrix_set_color(led, 1, LED_LAY4_COL);
     } else {
-        hiszd_matrix_set_color(LED, 0, 0, 0);
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
     }
 #endif
 #if defined(LED_LAY5) && defined(LED_LAY5_COL)
-    LED.led[0] = LED_LAY5;
+    led[0] = LED_LAY5;
     if (layer_state_is(4)) {
-        hiszd_matrix_set_color(LED, LED_LAY5_COL);
+        hiszd_matrix_set_color(led, 1, LED_LAY5_COL);
     } else {
-        hiszd_matrix_set_color(LED, 0, 0, 0);
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
     }
 #endif
     return;

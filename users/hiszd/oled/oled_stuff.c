@@ -13,8 +13,8 @@
 #define OLED_MESG_CONST "Message: "
 
 #if defined(KEYBOARD_hotdox76v2)
-uint8_t oled_left[2][20];
-uint8_t oled_right[2][20];
+uint8_t oled_left[2][17];
+uint8_t oled_right[2][17];
 
 master_to_slave_oled_t oled_m2s;
 
@@ -23,10 +23,13 @@ typedef struct _slave_to_master_oled_t {
 } slave_to_master_oled_t;
 slave_to_master_oled_t s2m;
 #else
-uint8_t oled_left[2][20];
+uint8_t oled_left[2][17];
 #endif
 
-static uint32_t oled_timeout = OLED_TIMEOUT;
+static uint16_t message_timeout = 4000;
+static uint32_t message_timer;
+
+static uint16_t oled_timeout = OLED_TIMEOUT;
 static uint32_t oled_timer;
 uint32_t        oled_scan;
 
@@ -83,21 +86,26 @@ void render_right_helper_fun(uint8_t start_col) {
 }
 
 void render_left_helper_fun(uint8_t start_col, uint8_t max_col) {
-    // if (oled_left[0][0] != 0x00) {
-    oled_set_cursor(start_col, 0);
-    oled_write_P(PSTR(OLED_MESG_CONST), false);
-    oled_set_cursor(start_col, 1);
-    oled_write((const char *)oled_left[0], false);
-    // }
+    if (oled_left[0][0] != 0x00) {
+        oled_set_cursor(start_col, 0);
+        oled_write_P(PSTR(OLED_MESG_CONST), false);
+        oled_set_cursor(start_col, 1);
+        oled_write((const char *)oled_left[0], false);
+    } else {
+        oled_set_cursor(start_col, 0);
+        oled_write_P(PSTR("                 "), false);
+        oled_set_cursor(start_col, 1);
+        oled_write_P(PSTR("                 "), false);
+    }
 }
 
 void render_right(void) {
     render_right_helper_fun(0);
 }
 
-void hid_msg(uint8_t data[20], uint8_t size, uint8_t ind) {
-    // memset(oled_left[ind], 0x00, sizeof(uint8_t[20]));
-    memcpy(oled_left[ind], data, sizeof(uint8_t[size]));
+void hid_msg(uint8_t data[17], uint8_t size) {
+    memcpy(oled_left[0], data, sizeof(uint8_t[size]));
+    message_timer = timer_read32();
 }
 
 void render_left() {
@@ -137,14 +145,18 @@ void matrix_scan_oled(void) {
 #endif
 #if defined(OLED_TIMEOUT) && defined(OLED_SCROLL_TIMEOUT)
     if (is_oled_on() && timer_elapsed32(oled_timer) > oled_timeout) {
-        oled_scan = 5000;
+        oled_scan = 1000;
     }
 #endif
+    if (timer_elapsed32(message_timer) > message_timeout) {
+        memset(oled_left[0], 0x00, sizeof(uint8_t[17]));
+    }
 }
 
 void noiz_sync_slave_handler(uint8_t in_buflen, const void *in_data, uint8_t out_buflen, void *out_data) {
     const master_to_slave_oled_t *m2s = (const master_to_slave_oled_t *)in_data;
-    s2m.leader_on                     = m2s->leader_on;
+    slave_to_master_oled_t *      s2m = (slave_to_master_oled_t *)out_data;
+    s2m->leader_on                    = m2s->leader_on;
 }
 
 void keyboard_post_init_oled(void) {

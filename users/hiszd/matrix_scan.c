@@ -4,15 +4,17 @@
 #include "secrets.h"
 #include "rgb_mat.h"
 
-bool leader_on = false;
-
 __attribute__((weak)) bool matrix_scan_user_keymap(void) {
     return true;
 };
 
+#ifdef LEADER_ENABLE
+bool leader_on = false;
 LEADER_EXTERNS();
+#endif /* LEADER_ENABLE */
 
 void matrix_scan_user(void) {
+#ifdef LEADER_ENABLE
     LEADER_DICTIONARY() {
         leading = false;
         leader_end();
@@ -27,10 +29,14 @@ void matrix_scan_user(void) {
             send_string(P2);
         };
     };
+#endif /* LEADER_ENABLE */
 
+#ifdef OLED_ENABLE
     matrix_scan_oled();
+#endif /* OLED_ENABLE */
 };
 
+#ifdef LEADER_ENABLE
 void leader_start() {
     leader_on = true;
 }
@@ -38,6 +44,7 @@ void leader_start() {
 void leader_end() {
     leader_on = false;
 }
+#endif /* LEADER_ENABLE */
 
 void rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     uint8_t led[1];

@@ -23,12 +23,21 @@
 #    define OLED_FADE_OUT_INTERVAL 0
 #endif
 
-#define RAW_USAGE_PAGE 0xFF90
-#define RAW_USAGE_ID 0x69
+#ifdef HISZD_HID
+#    define RAW_USAGE_PAGE 0xFF60
+#    define RAW_USAGE_ID 0x69
+#endif
 
 #define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS, NOIZ_OLED_SYNC
 
+#if defined(SPLIT_ENABLE) && defined(OLED_ENABLE)
 // Master to slave:
-#define RPC_M2S_BUFFER_SIZE 132
+#    define RPC_M2S_BUFFER_SIZE 132
 // Slave to master:
-#define RPC_S2M_BUFFER_SIZE 132
+#    define RPC_S2M_BUFFER_SIZE 132
+#    elseif defined(SPLIT_ENABLE)
+// Master to slave:
+#    define RPC_M2S_BUFFER_SIZE 64
+// Slave to master:
+#    define RPC_S2M_BUFFER_SIZE 64
+#endif // SPLIT_ENABLE

@@ -2,7 +2,9 @@
 
 #pragma once
 
+#ifdef LEADER_ENABLE
 extern bool leader_on;
+#endif /* LEADER_ENABLE */
 
 bool matrix_scan_user_keymap(void);
 

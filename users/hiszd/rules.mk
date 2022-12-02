@@ -8,14 +8,26 @@ RAW_ENABLE = yes
 
 SRC += hiszd.c \
        process_records.c \
-       transport_sync.c \
-       raw_hid.c \
-       rgb_mat.c \
        matrix_scan.c
+
+ifeq ($(strip $(RAW_ENABLE)), yes)
+    SRC += raw_hid.c
+endif
+
+ifeq ($(strip $(SPLIT_ENABLE)), yes)
+    SRC += transport_sync.c
+endif
+
+ifeq ($(strip $(RGBLIGHT_ENABLE)), yes)
+    SRC += rgb_mat.c
+endif
+
+ifeq ($(strip $(RGB_MATRIX_ENABLE)), yes)
+    SRC += rgb_mat.c
+endif
 
 ifeq ($(strip $(OLED_ENABLE)), yes)
     SRC += oled/oled_stuff.c
-    # SRC += $(USER_PATH)/keyrecords/tap_dances.c
 endif
 
 ifneq ("$(wildcard $(USER_PATH)/secrets.c)","")

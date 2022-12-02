@@ -6,7 +6,6 @@
 #include <string.h>
 #define NOIZ_LOGO
 #include "noiz_logo.h"
-#include "ext_big_font.h"
 
 #define OLED_LAYER_CONST "Layer ["
 #define OLED_INDS_CONST "Inds  ["

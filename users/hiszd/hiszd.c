@@ -1,4 +1,4 @@
-/* Copyright 2019 @ninjonas
+/* Copyright 2022 @hiszd
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,10 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "hiszd.h"
-#include "transport_sync.h"
-#include "oled/oled_stuff.h"
 #include <stdint.h>
 #include "rgb_mat.h"
+
+#ifdef SPLIT_ENABLE
+#    include "transport_sync.h"
+#endif /* SPLIT_ENABLE */
+
+#ifdef OLED_ENABLE
+#    include "oled/oled_stuff.h"
+#endif /* OLED_ENABLE */
 
 typedef union {
     uint32_t raw;
@@ -40,7 +46,9 @@ void keyboard_post_init_user() {
         layer_on(_RSTLNE);
     }
 
+#ifdef SPLIT_ENABLE
     keyboard_post_init_transport_sync();
+#endif /* SPLIT_ENABLE */
 
 #ifdef RGBLIGHT_ENABLE
     // Cycles through the entire hue wheel and resetting to default color
@@ -61,7 +69,7 @@ void keyboard_post_init_user() {
 #endif
     layer_state_set_user(layer_state);
 
-#if OLED_ENABLE
+#ifdef OLED_ENABLE
     keyboard_post_init_oled();
 #endif
 
@@ -69,8 +77,12 @@ void keyboard_post_init_user() {
 }
 
 void housekeeping_task_user(void) {
+#ifdef SPLIT_ENABLE
     housekeeping_task_rgb();
+#    ifdef OLED_ENABLE
     housekeeping_task_oled();
+#    endif /* OLED_ENABLE */
+#endif     /* SPLIT_ENABLE */
     return;
 }
 

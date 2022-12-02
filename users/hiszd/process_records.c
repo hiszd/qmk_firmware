@@ -1,8 +1,4 @@
-#include "hiszd.h"
-
-#ifdef OLED_ENABLE
-#    include "oled/oled_stuff.h"
-#endif /* OLED_ENABLE */
+#include "process_records.h"
 
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
     return true;
@@ -12,7 +8,7 @@ __attribute__((weak)) bool process_record_secrets(uint16_t keycode, keyrecord_t 
     return true;
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case WSPL:
             if (record->event.pressed) {
@@ -37,10 +33,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         default:
             break;
     }
-
-#ifdef OLED_ENABLE
-    process_record_oled(keycode, record);
-#endif /* OLED_ENABLE */
 
     return process_record_keymap(keycode, record) && process_record_secrets(keycode, record);
 }

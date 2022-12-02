@@ -1,11 +1,4 @@
 #include "oled_stuff.h"
-#include "matrix_scan.h"
-#include "oled_driver.h"
-#include "transactions.h"
-#include <stdint.h>
-#include <string.h>
-#define NOIZ_LOGO
-#include "noiz_logo.h"
 
 #define OLED_LAYER_CONST "Layer ["
 #define OLED_INDS_CONST "Inds  ["
@@ -14,8 +7,6 @@
 #if defined(KEYBOARD_hotdox76v2)
 uint8_t oled_left[2][17];
 uint8_t oled_right[2][17];
-
-master_to_slave_oled_t oled_m2s;
 
 typedef struct _slave_to_master_oled_t {
     bool leader_on;
@@ -31,6 +22,8 @@ static uint32_t message_timer;
 static uint16_t oled_timeout = OLED_TIMEOUT;
 static uint32_t oled_timer;
 uint32_t        oled_scan;
+
+extern master_to_slave_oled_t oled_m2s;
 
 bool oled_task_user(void) {
     oled_set_cursor(5, 0);

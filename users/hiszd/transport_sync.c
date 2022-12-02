@@ -1,8 +1,4 @@
 #include "transport_sync.h"
-#include <stdbool.h>
-#include <stdint.h>
-#include "transactions.h"
-#include "crc.h"
 
 master_to_slave_t m2s_overall;
 int               ledsize   = sizeof m2s_overall.led / sizeof m2s_overall.led[0];

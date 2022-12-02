@@ -1,4 +1,11 @@
-#include "../hiszd.h"
+#include "../../../quantum/quantum.h"
+#include "../matrix_scan.h"
+#include "oled_driver.h"
+#include "transactions.h"
+#include <stdint.h>
+#include <string.h>
+#define NOIZ_LOGO
+#include "noiz_logo.h"
 
 #define UNC (94 + 0x21)
 
@@ -6,8 +13,8 @@ typedef struct _master_to_slave_oled_t {
     bool leader_on;
 } master_to_slave_oled_t;
 
-extern master_to_slave_oled_t oled_m2s;
-void                          hid_msg(uint8_t[17], uint8_t);
+master_to_slave_oled_t oled_m2s;
+void                   hid_msg(uint8_t[17], uint8_t);
 
 bool process_record_oled(uint16_t, keyrecord_t *);
 void matrix_scan_oled(void);

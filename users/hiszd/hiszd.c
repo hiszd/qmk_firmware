@@ -14,16 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "hiszd.h"
-#include <stdint.h>
-#include "rgb_mat.h"
-
-#ifdef SPLIT_ENABLE
-#    include "transport_sync.h"
-#endif /* SPLIT_ENABLE */
-
-#ifdef OLED_ENABLE
-#    include "oled/oled_stuff.h"
-#endif /* OLED_ENABLE */
 
 typedef union {
     uint32_t raw;
@@ -46,9 +36,9 @@ void keyboard_post_init_user() {
         layer_on(_RSTLNE);
     }
 
-#ifdef SPLIT_ENABLE
+#ifdef SPLIT_KEYBOARD
     keyboard_post_init_transport_sync();
-#endif /* SPLIT_ENABLE */
+#endif /* SPLIT_KEYBOARD */
 
 #ifdef RGBLIGHT_ENABLE
     // Cycles through the entire hue wheel and resetting to default color
@@ -77,13 +67,28 @@ void keyboard_post_init_user() {
 }
 
 void housekeeping_task_user(void) {
-#ifdef SPLIT_ENABLE
+#ifdef SPLIT_KEYBOARD
     housekeeping_task_rgb();
 #    ifdef OLED_ENABLE
     housekeeping_task_oled();
 #    endif /* OLED_ENABLE */
-#endif     /* SPLIT_ENABLE */
+#endif     /* SPLIT_KEYBOARD */
     return;
+}
+
+void matrix_scan_user(void) {
+    matrix_scan_aux();
+#ifdef OLED_ENABLE
+    matrix_scan_oled();
+#endif /* OLED_ENABLE */
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    process_record_aux(keycode, record);
+#ifdef OLED_ENABLE
+    process_record_oled(keycode, record);
+#endif /* OLED_ENABLE */
+    return true;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {

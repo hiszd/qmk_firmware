@@ -30,14 +30,15 @@
 
 #define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS, NOIZ_OLED_SYNC
 
-#if defined(SPLIT_ENABLE) && defined(OLED_ENABLE)
+#if defined(SPLIT_KEYBOARD) && defined(OLED_ENABLE)
 // Master to slave:
 #    define RPC_M2S_BUFFER_SIZE 132
 // Slave to master:
 #    define RPC_S2M_BUFFER_SIZE 132
-#    elseif defined(SPLIT_ENABLE)
+#endif // SPLIT_KEYBOARD
+#if defined(SPLIT_KEYBOARD) && !defined(OLED_ENABLE)
 // Master to slave:
 #    define RPC_M2S_BUFFER_SIZE 64
 // Slave to master:
 #    define RPC_S2M_BUFFER_SIZE 64
-#endif // SPLIT_ENABLE
+#endif // SPLIT_KEYBOARD

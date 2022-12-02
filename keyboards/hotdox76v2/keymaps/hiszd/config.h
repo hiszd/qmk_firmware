@@ -1,3 +1,5 @@
+#define HISZD_HID
+
 // clang-format off
 #define LED_LAY1 1
 #define LED_LAY1_COL 255,0,0

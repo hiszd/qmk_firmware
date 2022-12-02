@@ -1,5 +1,8 @@
+#include "../../quantum/quantum.h"
+#include "transactions.h"
 #include <stdint.h>
-#include "hiszd.h"
+#include <stdbool.h>
+#include "crc.h"
 
 typedef struct _rgb_led {
     uint8_t r;

@@ -1,8 +1,4 @@
-#include <stdint.h>
-#include "hiszd.h"
-#include "oled/oled_stuff.h"
-#include "secrets.h"
-#include "rgb_mat.h"
+#include "matrix_scan.h"
 
 __attribute__((weak)) bool matrix_scan_user_keymap(void) {
     return true;
@@ -13,7 +9,7 @@ bool leader_on = false;
 LEADER_EXTERNS();
 #endif /* LEADER_ENABLE */
 
-void matrix_scan_user(void) {
+void matrix_scan_aux(void) {
 #ifdef LEADER_ENABLE
     LEADER_DICTIONARY() {
         leading = false;
@@ -30,10 +26,6 @@ void matrix_scan_user(void) {
         };
     };
 #endif /* LEADER_ENABLE */
-
-#ifdef OLED_ENABLE
-    matrix_scan_oled();
-#endif /* OLED_ENABLE */
 };
 
 #ifdef LEADER_ENABLE

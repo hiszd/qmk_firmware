@@ -16,7 +16,10 @@
 #pragma once
 #include <stdint.h>
 #include "../../quantum/quantum.h"
-#include "process_records.h"
+
+#ifdef SPLIT_KEYBOARD
+#    include "transport_sync.h"
+#endif /* SPLIT_KEYBOARD */
 
 #ifdef RAW_ENABLE
 #    include "raw_hid.h"
@@ -24,13 +27,19 @@
 
 #ifdef OLED_ENABLE
 #    define NOIZ_LOGO
-#    include "oled/noiz_logo.h"
-#    include "oled/drashna_font.h"
+#    include "oled/oled_stuff.h"
 #endif
+
+#include "process_records.h"
+
+#if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
+#    include "rgb_mat.h"
+#endif // defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
 
 #ifdef TAP_DANCE_ENABLE
 // #    include "tap_dances.h"
 #endif
+
 #if defined(KEYBOARD_lily58_rev1) & defined(PROTOCOL_LUFA)
 #    include "lufa.h"
 #    include "split_util.h"

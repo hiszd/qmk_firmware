@@ -14,7 +14,7 @@ ifeq ($(strip $(RAW_ENABLE)), yes)
     SRC += raw_hid.c
 endif
 
-ifeq ($(strip $(SPLIT_ENABLE)), yes)
+ifeq ($(strip $(SPLIT_KEYBOARD)), yes)
     SRC += transport_sync.c
 endif
 

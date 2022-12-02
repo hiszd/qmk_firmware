@@ -3,21 +3,6 @@
 #include "stdint.h"
 #include "hiszd.h"
 #include "string.h"
-#ifdef OLED_ENABLE
-#    include "oled/oled_stuff.h"
-#endif /* OLED_ENABLE */
-#ifdef SPLIT_ENABLE
-#    include "transactions.h"
-#    include "transport_sync.h"
-#endif /* SPLIT_ENABLE */
-#if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
-#    include "rgb_mat.h"
-#    include "color.h"
-#endif /* defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE) */
-#ifdef SPLIT_ENABLE
-#    include "transactions.h"
-#    include "transport_sync.h"
-#endif /* SPLIT_ENABLE */
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
 #    include "rgb_mat.h"
 #    include "color.h"

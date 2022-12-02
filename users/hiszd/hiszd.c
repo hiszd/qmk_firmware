@@ -100,6 +100,48 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         eeconfig_update_user(user_config.raw);
     }
 
+    uint8_t led[1];
+#if defined(LED_LAY1) && defined(LED_LAY1_COL)
+    led[0] = LED_LAY1;
+    if (IS_LAYER_ON_STATE(state, 0)) {
+        hiszd_matrix_set_color(led, 1, LED_LAY1_COL);
+    } else {
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
+    }
+#endif
+#if defined(LED_LAY2) && defined(LED_LAY2_COL)
+    led[0] = LED_LAY2;
+    if (IS_LAYER_ON_STATE(state, 1)) {
+        hiszd_matrix_set_color(led, 1, LED_LAY2_COL);
+    } else {
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
+    }
+#endif
+#if defined(LED_LAY3) && defined(LED_LAY3_COL)
+    led[0] = LED_LAY3;
+    if (IS_LAYER_ON_STATE(state, 2)) {
+        hiszd_matrix_set_color(led, 1, LED_LAY3_COL);
+    } else {
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
+    }
+#endif
+#if defined(LED_LAY4) && defined(LED_LAY4_COL)
+    led[0] = LED_LAY4;
+    if (IS_LAYER_ON_STATE(state, 3)) {
+        hiszd_matrix_set_color(led, 1, LED_LAY4_COL);
+    } else {
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
+    }
+#endif
+#if defined(LED_LAY5) && defined(LED_LAY5_COL)
+    led[0] = LED_LAY5;
+    if (IS_LAYER_ON_STATE(state, 4)) {
+        hiszd_matrix_set_color(led, 1, LED_LAY5_COL);
+    } else {
+        hiszd_matrix_set_color(led, 1, 0, 0, 0);
+    }
+#endif
+
     return state;
 };
 

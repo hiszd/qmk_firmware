@@ -10,7 +10,6 @@ bool              syncfail  = false;
 void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t out_buflen, void* out_data) {
     const master_to_slave_t* m2s = (const master_to_slave_t*)in_data;
     slave_to_master_t*       s2m = (slave_to_master_t*)out_data;
-    // memset(m2s_slave, m2s, sizeof(master_to_slave_t));
     if (m2s->checksum == crc8(m2s->led, sizeof(m2s->led))) {
         for (int n = 0; n < ledsize; n++) {
             rgb_matrix_set_color(n + 43, m2s->led[n].r, m2s->led[n].g, m2s->led[n].b);
@@ -45,15 +44,19 @@ void housekeeping_task_rgb(void) {
                 slave_to_master_t s2m = {0};
                 if (transaction_rpc_exec(HISZD_SYNC_LIGHTS, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
                     last_sync = timer_read32();
-                    dprintf("Slave sync success!\n");
-                    // m2s_go = false;
+#ifdef CONSOLE_ENABLE
+                    uprint("Slave sync success!\n");
+#endif /* CONSOLE_ENABLE */
+                    m2s_go = false;
                     if (!s2m.success) {
                         syncfail = true;
                     } else {
                         syncfail = false;
                     }
                 } else {
-                    dprint("Slave sync failed!\n");
+#ifdef CONSOLE_ENABLE
+                    uprint("Slave sync failed!\n");
+#endif /* CONSOLE_ENABLE */
                     syncfail = true;
                 }
             }

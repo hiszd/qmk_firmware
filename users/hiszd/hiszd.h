@@ -16,6 +16,7 @@
 #pragma once
 #include <stdint.h>
 #include "../../quantum/quantum.h"
+#include "matrix_scan.h"
 
 #ifdef SPLIT_KEYBOARD
 #    include "transport_sync.h"
@@ -23,6 +24,7 @@
 
 #ifdef RAW_ENABLE
 #    include "raw_hid.h"
+#    include "hiszd_hid.h"
 #endif // RAW_ENABLE
 
 #ifdef OLED_ENABLE

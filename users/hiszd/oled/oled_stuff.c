@@ -16,6 +16,8 @@ slave_to_master_oled_t s2m;
 uint8_t oled_left[2][17];
 #endif
 
+master_to_slave_oled_t oled_m2s;
+
 static uint16_t message_timeout = 4000;
 static uint32_t message_timer;
 
@@ -70,9 +72,17 @@ void render_right_helper_fun(uint8_t start_col) {
     oled_write_P(led_state.num_lock ? PSTR("N") : PSTR(" "), false);
     oled_write_P(led_state.caps_lock ? PSTR(" C") : PSTR("  "), false);
     if (is_keyboard_master()) {
+#ifdef LEADER_ENABLE
         oled_write_P(leader_on ? PSTR(" L") : PSTR("  "), false);
+#else
+        oled_write_P(PSTR("  "), false);
+#endif /* LEADER_ENABLE */
     } else {
+#ifdef LEADER_ENABLE
         oled_write_P(s2m.leader_on ? PSTR(" L") : PSTR("  "), false);
+#else
+        oled_write_P(PSTR("  "), false);
+#endif /* LEADER_ENABLE */
     }
     oled_write_P(PSTR("]"), false);
 }
@@ -160,7 +170,11 @@ void housekeeping_task_oled(void) {
         // Interact with slave every 400ms
         static uint32_t last_sync = 0;
         if (timer_elapsed32(last_sync) > oled_scan) {
+#ifdef LEADER_ENABLE
             oled_m2s.leader_on = leader_on;
+#else
+            oled_m2s.leader_on = false;
+#endif /* LEADER_ENABLE */
             if (transaction_rpc_exec(NOIZ_OLED_SYNC, sizeof(oled_m2s), &oled_m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
                 dprint("Slave sync succeded!\n");

@@ -9,12 +9,16 @@
 
 #define UNC (94 + 0x21)
 
+#ifndef M2SOLED
 typedef struct _master_to_slave_oled_t {
     bool leader_on;
 } master_to_slave_oled_t;
+#    define M2SOLED
+#endif /* M2SOLED */
 
-master_to_slave_oled_t oled_m2s;
-void                   hid_msg(uint8_t[17], uint8_t);
+extern master_to_slave_oled_t oled_m2s;
+
+void hid_msg(uint8_t[17], uint8_t);
 
 bool process_record_oled(uint16_t, keyrecord_t *);
 void matrix_scan_oled(void);

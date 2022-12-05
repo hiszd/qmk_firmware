@@ -3,7 +3,18 @@
 hidstore_t store;
 bool       receive_complete = false;
 
+/* The packets are arranged as such:
+ * 0x00: current packet number
+ * 0x01: total packets(max of 2)
+ * 0x02: total packet size
+ * 0x03: parameter 1
+ * 0x04: parameter 2
+ * 0x05: parameter 3
+ * 0x06-0xFF: led array/oled characters
+ */
+
 void raw_hid_receive(uint8_t *data, uint8_t length) {
+    // The second byte is the size of the message
     uint8_t size = data[2];
     if (data[1] == 2) {
         if (data[0] == 1) {
@@ -76,13 +87,11 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                     rgb_matrix_sethsv_noeeprom(param1, param2, param3);
 #    endif /* RGB_MATRIX_ENABLE */
                     return;
-                    // This does not work on split keyboards
                 case 1:
-// TODO will only work on matrix keyboards right now
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_set_flags(LED_FLAG_NONE);
-                    hiszd_matrix_set_color(leddata, store.length - 3, param1, param2, param3);
 #    endif /* RGB_MATRIX_ENABLE */
+                    hiszd_matrix_set_color(leddata, store.length - 3, param1, param2, param3);
                     return;
                 case 2:
 // TODO will only work on matrix keyboards right now
@@ -94,12 +103,9 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                     raw_hid_send(data, RAW_EPSIZE);
 #    endif /* RGB_MATRIX_ENABLE */
                     return;
-// TODO will only work on matrix keyboards right now
-#    ifdef RGB_MATRIX_ENABLE
                 case 3:
                     hiszd_matrix_set_color_all(param1, param2, param3);
                     return;
-#    endif /* RGB_MATRIX_ENABLE */
                 default:
                     return;
             }

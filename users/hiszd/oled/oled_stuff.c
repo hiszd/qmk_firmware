@@ -23,6 +23,7 @@ static uint32_t message_timer;
 
 static uint16_t oled_timeout = OLED_TIMEOUT;
 static uint32_t oled_timer;
+bool            oled_block;
 uint32_t        oled_scan;
 
 extern master_to_slave_oled_t oled_m2s;
@@ -106,8 +107,11 @@ void render_right(void) {
 }
 
 void hid_msg(uint8_t data[17], uint8_t size) {
+    oled_on();
     memcpy(oled_left[0], data, sizeof(uint8_t[size]));
     message_timer = timer_read32();
+    oled_timer    = timer_read32();
+    oled_block    = true;
 }
 
 void render_left() {
@@ -152,6 +156,8 @@ void matrix_scan_oled(void) {
 #endif
     if (timer_elapsed32(message_timer) > message_timeout) {
         memset(oled_left[0], 0x00, sizeof(uint8_t[17]));
+        oled_timer = timer_read32();
+        oled_block = false;
     }
 }
 

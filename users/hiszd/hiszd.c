@@ -41,16 +41,8 @@ void keyboard_post_init_user() {
 #endif /* SPLIT_KEYBOARD */
 
 #ifdef RGBLIGHT_ENABLE
-    // Cycles through the entire hue wheel and resetting to default color
-    uint16_t default_hue = rgblight_config.hue;
     rgblight_enable_noeeprom();
-    layer_state_set_user(layer_state);
-    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
-    for (uint16_t i = 255; i > 0; i--) {
-        rgblight_sethsv_noeeprom((i + default_hue) % 255, rgblight_config.sat, rgblight_config.val);
-        matrix_scan();
-        wait_ms(10);
-    }
+    hiszd_matrix_set_color_all(255, 150, 0);
 #endif
 #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_enable_noeeprom();

@@ -22,6 +22,9 @@ void hiszd_matrix_set_color(uint8_t *leds, uint8_t ledslen, uint8_t red, uint8_t
 #ifdef RGB_MATRIX_ENABLE
             rgb_matrix_set_color(leds[index], red, green, blue);
 #endif /* RGB_MATRIX_ENABLE */
+#ifdef RGBLIGHT_ENABLE
+            rgblight_setrgb_at(red, green, blue, leds[index]);
+#endif /* RGBLIGHT_ENABLE */
 #ifdef SPLIT_KEYBOARD
         }
 #endif /* SPLIT_KEYBOARD */
@@ -46,4 +49,7 @@ void hiszd_matrix_set_color_all(uint8_t red, uint8_t green, uint8_t blue) {
 #ifdef RGB_MATRIX_ENABLE
     rgb_matrix_set_color_all(red, green, blue);
 #endif /* RGB_MATRIX_ENABLE */
+#ifdef RGBLIGHT_ENABLE
+    rgblight_setrgb_range(red, green, blue, 0, RGBLED_NUM);
+#endif /* RGBLIGHT_ENABLE */
 }

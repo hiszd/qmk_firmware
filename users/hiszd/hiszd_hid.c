@@ -45,17 +45,35 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         memcpy(store.bytes, data + 3, sizeof(uint8_t[size - 3]));
         store.length     = size - 3;
         receive_complete = true;
+#ifdef CONSOLE_ENABLE
+            uprintf("Store: %u [", store.length);
+            for (uint8_t i = 0; i < store.length; i++) {
+                if (i != store.length - 1) {
+                    uprintf("%u,", store.bytes[i]);
+                } else {
+                    uprintf("%u", store.bytes[i]);
+                }
+            }
+            uprint("]\n");
+#endif /* CONSOLE_ENABLE */
     } else {
+#ifdef CONSOLE_ENABLE
+            uprintf("invalid packet total: %u\n",data[1]);
+#endif /* CONSOLE_ENABLE */
         return;
     }
-    uint8_t                         reqtype = store.bytes[1];
-    uint8_t                         command = store.bytes[2];
-    __attribute__((unused)) uint8_t param1  = store.bytes[3];
-    __attribute__((unused)) uint8_t param2  = store.bytes[4];
-    __attribute__((unused)) uint8_t param3  = store.bytes[5];
+    uint8_t                         reqtype = store.bytes[0];
+    uint8_t                         command = store.bytes[1];
+#ifdef CONSOLE_ENABLE
+            uprintf("reqtype: %u\n",reqtype);
+            uprintf("command: %u\n",command);
+#endif /* CONSOLE_ENABLE */
+    __attribute__((unused)) uint8_t param1  = store.bytes[2];
+    __attribute__((unused)) uint8_t param2  = store.bytes[3];
+    __attribute__((unused)) uint8_t param3  = store.bytes[4];
 #ifdef OLED_ENABLE
     uint8_t dat[17];
-    memcpy(dat, store.bytes + 6, sizeof(uint8_t[17]));
+    memcpy(dat, store.bytes + 5, sizeof(uint8_t[17]));
 #endif /* OLED_ENABLE */
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
     uint8_t leddata[store.length - 3];
@@ -91,6 +109,9 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_set_flags(LED_FLAG_NONE);
 #    endif /* RGB_MATRIX_ENABLE */
+#ifdef CONSOLE_ENABLE
+            uprint("setting led color\n");
+#endif /* CONSOLE_ENABLE */
                     hiszd_matrix_set_color(leddata, store.length - 3, param1, param2, param3);
                     return;
                 case 2:

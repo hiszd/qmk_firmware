@@ -13,7 +13,13 @@ bool       receive_complete = false;
  * 0x06-0xFF: led array/oled characters
  */
 
-void raw_hid_receive(uint8_t *data, uint8_t length) {
+void send_success(uint8_t val) {
+    uint8_t data[4] = {0x01, 0x01, 0x04, val};
+    raw_hid_send((uint8_t*)&data, RAW_EPSIZE);
+}
+
+void raw_hid_receive(uint8_t* data, uint8_t length) {
+    uint8_t sendreturnval = 0x00;
     // The second byte is the size of the message
     uint8_t size = data[2];
     if (data[1] == 2) {
@@ -89,10 +95,12 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             switch (command) {
                 case 0:
                     layer_off(param1);
-                    return;
+                    sendreturnval = 0x01;
+                    break;
                 case 1:
                     layer_on(param1);
-                    return;
+                    sendreturnval = 0x01;
+                    break;
             }
             break;
             // lighting functions
@@ -103,8 +111,9 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
 // TODO will only work on matrix keyboards right now
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_sethsv_noeeprom(param1, param2, param3);
+                    sendreturnval = 0x01;
 #    endif /* RGB_MATRIX_ENABLE */
-                    return;
+                    break;
                 case 1:
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_set_flags(LED_FLAG_NONE);
@@ -113,7 +122,8 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                     uprint("setting led color\n");
 #    endif /* CONSOLE_ENABLE */
                     hiszd_matrix_set_color(leddata, store.length - 3, param1, param2, param3);
-                    return;
+                    sendreturnval = 0x01;
+                    break;
                 case 2:
 // TODO will only work on matrix keyboards right now
 #    ifdef RGB_MATRIX_ENABLE
@@ -122,24 +132,31 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                     data[1] = hsv.s;
                     data[2] = hsv.v;
                     raw_hid_send(data, RAW_EPSIZE);
+                    sendreturnval = 0x01;
 #    endif /* RGB_MATRIX_ENABLE */
-                    return;
+                    break;
                 case 3:
                     hiszd_matrix_set_color_all(param1, param2, param3);
-                    return;
+                    sendreturnval = 0x01;
+                    break;
                 default:
-                    return;
+                    break;
             }
 #endif /* defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE) */
 #ifdef OLED_ENABLE
         case 2:
             hid_msg(dat, (size - 3));
-            return;
+            sendreturnval = 0x01;
+            break;
 #endif /* OLED_ENABLE */
         case 99:
             reset_keyboard();
-            return;
+            sendreturnval = 0x01;
+            break;
         default:
-            return;
+            break;
     }
+
+    send_success(sendreturnval);
+    return;
 }

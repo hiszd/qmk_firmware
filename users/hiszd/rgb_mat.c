@@ -1,17 +1,7 @@
 #include "rgb_mat.h"
 
 void hiszd_matrix_set_color(uint8_t *leds, uint8_t ledslen, uint8_t red, uint8_t green, uint8_t blue) {
-#ifdef CONSOLE_ENABLE
-    uprint("Leds: [");
-#endif /* CONSOLE_ENABLE */
     for (uint8_t index = 0; index < ledslen; index++) {
-#ifdef CONSOLE_ENABLE
-        if (index != ledslen - 1) {
-            uprintf("%u,", leds[index]);
-        } else {
-            uprintf("%u", leds[index]);
-        }
-#endif /* CONSOLE_ENABLE */
 #ifdef SPLIT_KEYBOARD
         uint8_t ledsplit[2] = RGB_MATRIX_SPLIT;
         if (leds[index] >= ledsplit[1] && leds[index] < DRIVER_LED_TOTAL) {
@@ -29,15 +19,15 @@ void hiszd_matrix_set_color(uint8_t *leds, uint8_t ledslen, uint8_t red, uint8_t
         }
 #endif /* SPLIT_KEYBOARD */
     }
-#ifdef CONSOLE_ENABLE
-    uprint("]\n");
-#endif /* CONSOLE_ENABLE */
 #ifdef SPLIT_KEYBOARD
     m2s_go = true;
 #endif /* SPLIT_KEYBOARD */
 }
 
 void hiszd_matrix_set_color_all(uint8_t red, uint8_t green, uint8_t blue) {
+#ifdef CONSOLE_ENABLE
+    uprintf("Setting all colors to: %u, %u, %u\n", red, green, blue);
+#endif /* CONSOLE_ENABLE */
 #ifdef SPLIT_KEYBOARD
     uint8_t ledsplit[2] = RGB_MATRIX_SPLIT;
     for (uint8_t i = 0; i < ledsplit[1]; i++) {

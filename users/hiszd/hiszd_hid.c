@@ -2,6 +2,7 @@
 
 hidstore_t store;
 bool       receive_complete = false;
+// #define RAW_EPSIZE 8
 
 /* The packets are arranged as such:
  * 0x00: current packet number
@@ -14,12 +15,19 @@ bool       receive_complete = false;
  */
 
 void send_success(uint8_t val) {
-    uint8_t data[4] = {0x01, 0x01, 0x04, val};
-    raw_hid_send((uint8_t*)&data, RAW_EPSIZE);
+    uint8_t data[32];
+    data[0] = 0x00;
+    data[1] = 0x01;
+    data[2] = 0x01;
+    data[3] = 0x04;
+    data[4] = val;
+    raw_hid_send(data, 32);
+#ifdef CONSOLE_ENABLE
+    uprintf("Sending response\n");
+#endif /* CONSOLE_ENABLE */
 }
 
 void raw_hid_receive(uint8_t* data, uint8_t length) {
-    uint8_t sendreturnval = 0x00;
     // The second byte is the size of the message
     uint8_t size = data[2];
     if (data[1] == 2) {
@@ -82,9 +90,9 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
     memcpy(dat, store.bytes + 5, sizeof(uint8_t[17]));
 #endif /* OLED_ENABLE */
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
-    uint8_t leddata[store.length - 3];
-    memset(leddata, 0xFF, sizeof(uint8_t[store.length - 3]));
-    memcpy(leddata, store.bytes + 3, sizeof(uint8_t[store.length - 3]));
+    uint8_t leddata[store.length - 5];
+    memset(leddata, 0xFF, sizeof(uint8_t[store.length - 5]));
+    memcpy(leddata, store.bytes + 5, sizeof(uint8_t[store.length - 5]));
 #    ifdef RGB_MATRIX_ENABLE
     HSV hsv = rgb_matrix_get_hsv();
 #    endif /* RGB_MATRIX_ENABLE */
@@ -95,15 +103,17 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
             switch (command) {
                 case 0:
                     layer_off(param1);
-                    sendreturnval = 0x01;
-                    break;
+                    send_success(0x01);
+                    return;
                 case 1:
                     layer_on(param1);
-                    sendreturnval = 0x01;
-                    break;
+                    send_success(0x01);
+                    return;
+                default:
+                    send_success(0x00);
+                    return;
             }
-            break;
-            // lighting functions
+                // lighting functions
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
         case 1:
             switch (command) {
@@ -111,9 +121,9 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
 // TODO will only work on matrix keyboards right now
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_sethsv_noeeprom(param1, param2, param3);
-                    sendreturnval = 0x01;
 #    endif /* RGB_MATRIX_ENABLE */
-                    break;
+                    send_success(0x01);
+                    return;
                 case 1:
 #    ifdef RGB_MATRIX_ENABLE
                     rgb_matrix_set_flags(LED_FLAG_NONE);
@@ -121,9 +131,9 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
 #    ifdef CONSOLE_ENABLE
                     uprint("setting led color\n");
 #    endif /* CONSOLE_ENABLE */
-                    hiszd_matrix_set_color(leddata, store.length - 3, param1, param2, param3);
-                    sendreturnval = 0x01;
-                    break;
+                    hiszd_matrix_set_color(leddata, store.length - 5, param1, param2, param3);
+                    send_success(0x01);
+                    return;
                 case 2:
 // TODO will only work on matrix keyboards right now
 #    ifdef RGB_MATRIX_ENABLE
@@ -131,32 +141,33 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
                     data[0] = hsv.h;
                     data[1] = hsv.s;
                     data[2] = hsv.v;
-                    raw_hid_send(data, RAW_EPSIZE);
-                    sendreturnval = 0x01;
+                    raw_hid_send(data, 32);
 #    endif /* RGB_MATRIX_ENABLE */
-                    break;
+                    send_success(0x01);
+                    return;
                 case 3:
                     hiszd_matrix_set_color_all(param1, param2, param3);
-                    sendreturnval = 0x01;
-                    break;
+                    send_success(0x01);
+                    return;
                 default:
-                    break;
+                    send_success(0x00);
+                    return;
             }
 #endif /* defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE) */
 #ifdef OLED_ENABLE
         case 2:
             hid_msg(dat, (size - 3));
-            sendreturnval = 0x01;
-            break;
+            send_success(0x01);
+            return;
 #endif /* OLED_ENABLE */
         case 99:
             reset_keyboard();
-            sendreturnval = 0x01;
-            break;
+            send_success(0x01);
+            return;
         default:
-            break;
+            send_success(0x00);
+            return;
     }
 
-    send_success(sendreturnval);
     return;
 }

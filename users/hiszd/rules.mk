@@ -38,7 +38,3 @@ endif
 ifeq ($(strip $(OLED_ENABLE)), yes)
     SRC += $(USER_PATH)/oled/oled_stuff.c
 endif
-
-ifneq ("$(wildcard $(USER_PATH)/secrets.c)","")
-    SRC += $(USER_PATH)/secrets.c
-endif

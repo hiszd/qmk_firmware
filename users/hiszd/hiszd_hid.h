@@ -1,7 +1,6 @@
 #include "../../quantum/quantum.h"
 #include "raw_hid.h"
 #include <stdint.h>
-#include "stdint.h"
 #include "string.h"
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
 #    include "rgb_mat.h"

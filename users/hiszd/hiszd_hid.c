@@ -22,6 +22,7 @@ void send_success(uint8_t val) {
     data[3] = 0x04;
     data[4] = val;
     raw_hid_send(data, 32);
+    raw_hid_send(data, 32);
 #ifdef CONSOLE_ENABLE
     uprintf("Sending response\n");
 #endif /* CONSOLE_ENABLE */
@@ -91,8 +92,10 @@ void raw_hid_receive(uint8_t* data, uint8_t length) {
 #endif /* OLED_ENABLE */
 #if defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE)
     uint8_t leddata[store.length - 5];
-    memset(leddata, 0xFF, sizeof(uint8_t[store.length - 5]));
-    memcpy(leddata, store.bytes + 5, sizeof(uint8_t[store.length - 5]));
+    if (reqtype == 1 && command == 1) {
+        memset(leddata, 0xFF, sizeof(uint8_t[store.length - 5]));
+        memcpy(leddata, store.bytes + 5, sizeof(uint8_t[store.length - 5]));
+    }
 #    ifdef RGB_MATRIX_ENABLE
     HSV hsv = rgb_matrix_get_hsv();
 #    endif /* RGB_MATRIX_ENABLE */

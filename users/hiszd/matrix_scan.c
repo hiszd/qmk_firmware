@@ -18,12 +18,23 @@ void matrix_scan_aux(void) {
         SEQ_ONE_KEY(KC_LGUI) {
             reset_keyboard();
         };
+        SEQ_ONE_KEY(KC_RGUI) {
+            reset_keyboard();
+        };
         SEQ_TWO_KEYS(KC_P, KC_TAB) {
             send_string(P1);
         };
         SEQ_TWO_KEYS(KC_P, KC_1) {
             send_string(P2);
         };
+#    ifdef KEYBOARD_fancytech_fancyalice66
+        SEQ_ONE_KEY(KC_UP) {
+            send_string(TG_RST);
+        };
+        SEQ_ONE_KEY(KC_DOWN) {
+            send_string(TG_GAM);
+        };
+#    endif
     };
 #endif /* LEADER_ENABLE */
 };

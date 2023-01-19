@@ -1,11 +1,11 @@
 #ifdef TAPPING_TERM
 #    undef TAPPING_TERM
-#    define TAPPING_TERM 120
 #endif
+#define TAPPING_TERM 150
 #define TAPPING_TERM_PER_KEY
 
 #ifdef LEADER_ENABLE
-#    define LEADER_TIMEOUT 500
+#    define LEADER_TIMEOUT 150
 #    define LEADER_PER_KEY_TIMING
 #endif
 
@@ -28,17 +28,19 @@
 #    define RAW_USAGE_ID 0x69
 #endif
 
-#define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS, NOIZ_OLED_SYNC
+#if defined(SPLIT_KEYBOARD)
 
-#if defined(SPLIT_KEYBOARD) && defined(RGB_MATRIX_ENABLE)
+#    define SPLIT_TRANSACTION_IDS_USER HISZD_SYNC_LIGHTS, NOIZ_OLED_SYNC
+
+#    if defined(RGB_MATRIX_ENABLE)
 // Master to slave:
-#    define RPC_M2S_BUFFER_SIZE 132
+#        define RPC_M2S_BUFFER_SIZE 132
 // Slave to master:
-#    define RPC_S2M_BUFFER_SIZE 132
-#endif // SPLIT_KEYBOARD
-#if defined(SPLIT_KEYBOARD) && !defined(RGB_MATRIX_ENABLE)
+#        define RPC_S2M_BUFFER_SIZE 132
+#    else
 // Master to slave:
-#    define RPC_M2S_BUFFER_SIZE 64
+#        define RPC_M2S_BUFFER_SIZE 64
 // Slave to master:
-#    define RPC_S2M_BUFFER_SIZE 64
-#endif // SPLIT_KEYBOARD
+#        define RPC_S2M_BUFFER_SIZE 64
+#    endif // SPLIT_KEYBOARD
+#endif     // SPLIT_KEYBOARD

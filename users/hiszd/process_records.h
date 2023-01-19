@@ -6,7 +6,11 @@ enum custom_keycodes {
     // Custom Macros
     WSPL = SAFE_RANGE,
     WSPR,
+    ZZ_SPC,
 };
+
+extern bool unds_on;
+extern bool dash_on;
 
 bool process_record_aux(uint16_t, keyrecord_t *);
 

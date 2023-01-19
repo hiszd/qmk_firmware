@@ -1,4 +1,5 @@
 #include "process_records.h"
+#include "matrix_scan.h"
 
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
     return true;
@@ -7,6 +8,9 @@ __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t *
 __attribute__((weak)) bool process_record_secrets(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
+
+bool dash_on = false;
+bool unds_on = false;
 
 bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -30,6 +34,26 @@ bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
             } else {
             }
             break;
+        case ZZ_SPC:
+            if (record->event.pressed) {
+                if (!leader_on) {
+                    if (dash_on) {
+                        register_code(KC_MINS);
+                    } else if (unds_on) {
+                        register_code16(KC_UNDS);
+                    } else {
+                        register_code(KC_SPC);
+                    }
+                }
+            } else {
+                if (dash_on) {
+                    unregister_code(KC_MINS);
+                } else if (unds_on) {
+                    unregister_code16(KC_UNDS);
+                } else {
+                    unregister_code(KC_SPC);
+                }
+            }
         default:
             break;
     }

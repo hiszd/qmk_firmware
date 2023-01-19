@@ -27,6 +27,27 @@ void matrix_scan_aux(void) {
         SEQ_TWO_KEYS(KC_P, KC_1) {
             send_string(P2);
         };
+        if (IS_LAYER_ON(1)) {
+            SEQ_ONE_KEY(KC_O) {
+                SEND_STRING(SS_TAP(X_RIGHT));
+            };
+        } else {
+            SEQ_ONE_KEY(KC_L) {
+                SEND_STRING(SS_TAP(X_RIGHT));
+            };
+        };
+        SEQ_ONE_KEY(KC_LEAD) {
+            unds_on = false;
+            dash_on = false;
+        };
+        SEQ_ONE_KEY(ZZ_SPC) {
+            unds_on = true;
+            dash_on = false;
+        };
+        SEQ_ONE_KEY(KC_ENT) {
+            unds_on = false;
+            dash_on = true;
+        };
     };
 #endif /* LEADER_ENABLE */
 };

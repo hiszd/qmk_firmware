@@ -1,4 +1,5 @@
 #define HISZD_HID
+#define DEBOUNCE 1
 
 // clang-format off
 #define LED_LAY1 30

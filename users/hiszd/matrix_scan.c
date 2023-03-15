@@ -30,6 +30,18 @@ void matrix_scan_aux(void) {
         SEQ_TWO_KEYS(KC_P, KC_2) {
             send_string(P3);
         };
+        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_TAB) {
+            send_string(P1);
+            SEND_STRING(SS_TAP(X_ENT));
+        };
+        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_1) {
+            send_string(P2);
+            SEND_STRING(SS_TAP(X_ENT));
+        };
+        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_2) {
+            send_string(P3);
+            SEND_STRING(SS_TAP(X_ENT));
+        };
         if (IS_LAYER_ON(1)) {
             SEQ_ONE_KEY(KC_O) {
                 SEND_STRING(SS_TAP(X_RIGHT));

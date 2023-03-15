@@ -1,6 +1,7 @@
 #include "../../quantum/quantum.h"
 #include "secrets.h"
 #include "rgb_mat.h"
+#include "process_records.h"
 #include <stdint.h>
 
 #pragma once

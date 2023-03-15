@@ -27,6 +27,9 @@ void matrix_scan_aux(void) {
         SEQ_TWO_KEYS(KC_P, KC_1) {
             send_string(P2);
         };
+        SEQ_TWO_KEYS(KC_P, KC_2) {
+            send_string(P3);
+        };
         if (IS_LAYER_ON(1)) {
             SEQ_ONE_KEY(KC_O) {
                 SEND_STRING(SS_TAP(X_RIGHT));

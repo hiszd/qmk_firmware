@@ -9,8 +9,11 @@ __attribute__((weak)) bool process_record_secrets(uint16_t keycode, keyrecord_t 
     return true;
 }
 
-bool dash_on = false;
-bool unds_on = false;
+bool spc_dash_on = false;
+bool spc_unds_on = false;
+
+bool unds_dash_on = false;
+bool unds_unds_on = true;
 
 bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -34,24 +37,44 @@ bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
             } else {
             }
             break;
+        case ZZ_UNDS:
+            if (record->event.pressed) {
+                if (!leader_on) {
+                    if (unds_dash_on) {
+                        register_code(KC_MINS);
+                    } else if (unds_unds_on) {
+                        register_code16(KC_UNDS);
+                    }
+                }
+            } else {
+                if (!leader_on) {
+                    if (unds_dash_on) {
+                        unregister_code(KC_MINS);
+                    } else if (unds_unds_on) {
+                        unregister_code16(KC_UNDS);
+                    }
+                }
+            }
         case ZZ_SPC:
             if (record->event.pressed) {
                 if (!leader_on) {
-                    if (dash_on) {
+                    if (spc_dash_on) {
                         register_code(KC_MINS);
-                    } else if (unds_on) {
+                    } else if (spc_unds_on) {
                         register_code16(KC_UNDS);
                     } else {
                         register_code(KC_SPC);
                     }
                 }
             } else {
-                if (dash_on) {
-                    unregister_code(KC_MINS);
-                } else if (unds_on) {
-                    unregister_code16(KC_UNDS);
-                } else {
-                    unregister_code(KC_SPC);
+                if (!leader_on) {
+                    if (spc_dash_on) {
+                        unregister_code(KC_MINS);
+                    } else if (spc_unds_on) {
+                        unregister_code16(KC_UNDS);
+                    } else {
+                        unregister_code(KC_SPC);
+                    }
                 }
             }
         default:

@@ -84,9 +84,9 @@ uint16_t encoder_rotated_timer;
 #define __________________RSTLNE_L2___________________ KC_A, KC_S, KC_E, KC_R, KC_T
 #define __________________RSTLNE_L3___________________ KC_G, KC_X, KC_C, KC_V, KC_SLSH
 
-#define __________________RSTLNE_R1___________________ KC_SCLN, KC_U, KC_K, KC_Y, KC_P
-#define __________________RSTLNE_R2___________________ KC_H, KC_N, KC_I, KC_O, KC_J
-#define __________________RSTLNE_R3___________________ KC_B, KC_L, KC_M, KC_COMM, KC_DOT
+#define __________________RSTLNE_R1___________________ KC_SCLN, KC_U, KC_K, KC_L, KC_P
+#define __________________RSTLNE_R2___________________ KC_H, KC_N, KC_I, KC_O, KC_Y
+#define __________________RSTLNE_R3___________________ KC_B, KC_J, KC_M, KC_COMM, KC_DOT
 
 #define __________________NUM_LEFT____________________ KC_1, KC_2, KC_3, KC_4, KC_5
 #define __________________NUM_RIGHT___________________ KC_6, KC_7, KC_8, KC_9, KC_0
@@ -95,12 +95,12 @@ uint16_t encoder_rotated_timer;
 #define __________________________FUNC_RIGHT_________________________ KC_TRNS, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11
 
 #define _____________________NUMPAD_1_______________________ KC_TRNS, KC_P7, KC_P8, KC_P9, KC_TRNS, KC_F12
-#define _____________________NUMPAD_2_______________________ KC_TRNS, KC_P4, KC_P5, KC_P6, KC_TRNS, KC_TRNS
+#define _____________________NUMPAD_2_______________________ KC_TRNS, KC_P4, KC_P5, KC_P6, KC_TRNS, RESET
 #define _____________________NUMPAD_3_______________________ KC_TRNS, KC_P1, KC_P2, KC_P3, KC_TRNS, KC_NUM
 #define _____________________NUMPAD_4_______________________ KC_P0, KC_DOT, KC_P0, KC_TRNS, KC_TRNS
 
 #define _____________MOD_LEFT_____________ KC_GRV, KC_DEL, KC_UP, KC_DOWN, LALT_T(KC_RBRC)
-#define _____________MOD_RIGHT____________ KC_LBRC, KC_LEFT, KC_RGHT, KC_TRNS, TT(_NUMPAD)
+#define _____________MOD_RIGHT____________ KC_LBRC, KC_LEFT, KC_RGHT, TG_RST, TT(_NUMPAD)
 
 // Layout wrappers
 #define LAYOUT_wrapper(...) LAYOUT(__VA_ARGS__)

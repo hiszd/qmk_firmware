@@ -51,17 +51,26 @@ void matrix_scan_aux(void) {
                 SEND_STRING(SS_TAP(X_RIGHT));
             };
         };
+        SEQ_ONE_KEY(ZZ_UNDS) {
+            if (unds_unds_on) {
+                unds_dash_on = true;
+                unds_unds_on = false;
+            } else if (unds_dash_on) {
+                unds_dash_on = false;
+                unds_unds_on = true;
+            }
+        };
         SEQ_ONE_KEY(KC_LEAD) {
-            unds_on = false;
-            dash_on = false;
+            spc_unds_on = false;
+            spc_dash_on = false;
         };
         SEQ_ONE_KEY(ZZ_SPC) {
-            unds_on = true;
-            dash_on = false;
+            spc_unds_on = true;
+            spc_dash_on = false;
         };
         SEQ_ONE_KEY(KC_ENT) {
-            unds_on = false;
-            dash_on = true;
+            spc_unds_on = false;
+            spc_dash_on = true;
         };
     };
 #endif /* LEADER_ENABLE */

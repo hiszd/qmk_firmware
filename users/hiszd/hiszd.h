@@ -104,5 +104,6 @@ uint16_t encoder_rotated_timer;
 
 // Layout wrappers
 #define LAYOUT_wrapper(...) LAYOUT(__VA_ARGS__)
+#define LAYOUT_ansi_69_wrapper(...) LAYOUT_ansi_69(__VA_ARGS__)
 // #define LAYOUT_ergodox_wrapper(...) LAYOUT_ergodox(__VA_ARGS__)
 #define LAYOUT_ergodox_pretty_wrapper(...) LAYOUT_ergodox_pretty(__VA_ARGS__)

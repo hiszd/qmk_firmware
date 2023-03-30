@@ -6,83 +6,71 @@ __attribute__((weak)) bool matrix_scan_user_keymap(void) {
 
 #ifdef LEADER_ENABLE
 bool leader_on = false;
-LEADER_EXTERNS();
-#endif /* LEADER_ENABLE */
 
-void matrix_scan_aux(void) {
-#ifdef LEADER_ENABLE
-    LEADER_DICTIONARY() {
-        leading = false;
-        leader_end();
-
-        SEQ_ONE_KEY(KC_LGUI) {
-            reset_keyboard();
-        };
-        SEQ_ONE_KEY(KC_RGUI) {
-            reset_keyboard();
-        };
-        SEQ_TWO_KEYS(KC_P, KC_TAB) {
-            send_string(P1);
-        };
-        SEQ_TWO_KEYS(KC_P, KC_1) {
-            send_string(P2);
-        };
-        SEQ_TWO_KEYS(KC_P, KC_2) {
-            send_string(P3);
-        };
-        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_TAB) {
-            send_string(P1);
-            SEND_STRING(SS_TAP(X_ENT));
-        };
-        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_1) {
-            send_string(P2);
-            SEND_STRING(SS_TAP(X_ENT));
-        };
-        SEQ_THREE_KEYS(KC_P, KC_ENT, KC_2) {
-            send_string(P3);
-            SEND_STRING(SS_TAP(X_ENT));
-        };
-        if (IS_LAYER_ON(1)) {
-            SEQ_ONE_KEY(KC_O) {
-                SEND_STRING(SS_TAP(X_RIGHT));
-            };
-        } else {
-            SEQ_ONE_KEY(KC_L) {
-                SEND_STRING(SS_TAP(X_RIGHT));
-            };
-        };
-        SEQ_ONE_KEY(ZZ_UNDS) {
-            if (unds_unds_on) {
-                unds_dash_on = true;
-                unds_unds_on = false;
-            } else if (unds_dash_on) {
-                unds_dash_on = false;
-                unds_unds_on = true;
-            }
-        };
-        SEQ_ONE_KEY(KC_LEAD) {
-            spc_unds_on = false;
-            spc_dash_on = false;
-        };
-        SEQ_ONE_KEY(ZZ_SPC) {
-            spc_unds_on = true;
-            spc_dash_on = false;
-        };
-        SEQ_ONE_KEY(KC_ENT) {
-            spc_unds_on = false;
-            spc_dash_on = true;
-        };
-    };
-#endif /* LEADER_ENABLE */
-};
-
-#ifdef LEADER_ENABLE
-void leader_start() {
+void leader_start_user() {
     leader_on = true;
 }
 
-void leader_end() {
+void leader_end_user() {
     leader_on = false;
+
+    if (leader_sequence_one_key(KC_LGUI)) {
+        reset_keyboard();
+    };
+    if (leader_sequence_one_key(KC_RGUI)) {
+        reset_keyboard();
+    };
+    if (leader_sequence_two_keys(KC_P, KC_TAB)) {
+        send_string(P1);
+    };
+    if (leader_sequence_two_keys(KC_P, KC_1)) {
+        send_string(P2);
+    };
+    if (leader_sequence_two_keys(KC_P, KC_2)) {
+        send_string(P3);
+    };
+    if (leader_sequence_three_keys(KC_P, KC_ENT, KC_TAB)) {
+        send_string(P1);
+        SEND_STRING(SS_TAP(X_ENT));
+    };
+    if (leader_sequence_three_keys(KC_P, KC_ENT, KC_1)) {
+        send_string(P2);
+        SEND_STRING(SS_TAP(X_ENT));
+    };
+    if (leader_sequence_three_keys(KC_P, KC_ENT, KC_2)) {
+        send_string(P3);
+        SEND_STRING(SS_TAP(X_ENT));
+    };
+    if (IS_LAYER_ON(1)) {
+        if (leader_sequence_one_key(KC_O)) {
+            SEND_STRING(SS_TAP(X_RIGHT));
+        };
+    } else {
+        if (leader_sequence_one_key(KC_L)) {
+            SEND_STRING(SS_TAP(X_RIGHT));
+        };
+    };
+    if (leader_sequence_one_key(ZZ_UNDS)) {
+        if (unds_unds_on) {
+            unds_dash_on = true;
+            unds_unds_on = false;
+        } else if (unds_dash_on) {
+            unds_dash_on = false;
+            unds_unds_on = true;
+        }
+    };
+    if (leader_sequence_one_key(QK_LEAD)) {
+        spc_unds_on = false;
+        spc_dash_on = false;
+    };
+    if (leader_sequence_one_key(ZZ_SPC)) {
+        spc_unds_on = true;
+        spc_dash_on = false;
+    };
+    if (leader_sequence_one_key(KC_ENT)) {
+        spc_unds_on = false;
+        spc_dash_on = true;
+    };
 }
 #endif /* LEADER_ENABLE */
 

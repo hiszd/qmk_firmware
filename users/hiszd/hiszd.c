@@ -114,7 +114,6 @@ void housekeeping_task_user(void) {
 }
 
 void matrix_scan_user(void) {
-    matrix_scan_aux();
     set_layer_leds();
 #ifdef OLED_ENABLE
     matrix_scan_oled();

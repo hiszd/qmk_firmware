@@ -1,4 +1,4 @@
-#define DEBOUNCE 1
+#define DEBOUNCE 4
 
 // clang-format off
 // #define LED_LAY1 29

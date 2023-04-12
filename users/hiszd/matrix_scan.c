@@ -18,7 +18,7 @@ void leader_end_user() {
         reset_keyboard();
     };
     if (leader_sequence_one_key(KC_RGUI)) {
-        reset_keyboard();
+        SEND_STRING("_");
     };
     if (leader_sequence_two_keys(KC_P, KC_TAB)) {
         send_string(P1);

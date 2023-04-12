@@ -21,16 +21,16 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_RSTLNE] = LAYOUT_ansi_69_wrapper(
-        KC_GRV,  __________________NUM_LEFT____________________,       __________________NUM_RIGHT___________________,   KC_MINS,  KC_EQL,  KC_BSPC, KC_DEL,
+        KC_GRV,  __________________NUM_LEFT____________________,       __________________NUM_RIGHT___________________,   KC_MINS,  KC_EQL,  KC_RGUI, KC_DEL,
         KC_TAB,  __________________RSTLNE_L1___________________,       __________________RSTLNE_R1___________________,   KC_LBRC,  KC_RBRC, KC_BSLS, KC_PGUP,
-        MT_CTL,  __________________RSTLNE_L2___________________,       __________________RSTLNE_R2___________________,   KC_QUOT,  KC_ENT,           KC_PGDN,
+        MT_CTL,  __________________RSTLNE_L2___________________,       __________________RSTLNE_R2___________________,   KC_QUOT,  KC_BSPC,          KC_PGDN,
         SC_LSPO, __________________RSTLNE_L3___________________, KC_B, __________________RSTLNE_R3___________________,   SC_RSPC,           KC_UP,
         KC_LCTL, KC_LALT,  KC_LGUI,           ZZ_SPC,           QK_LEAD,  KC_RGUI,          KC_ENT,            MO(_NUMPAD),        KC_LEFT, KC_DOWN, KC_RGHT),
 
     [_QWERTY] = LAYOUT_ansi_69_wrapper(
-        KC_GRV,  __________________NUM_LEFT____________________,       __________________NUM_RIGHT___________________,   KC_MINS,  KC_EQL,  KC_BSPC, KC_DEL,
+        KC_GRV,  __________________NUM_LEFT____________________,       __________________NUM_RIGHT___________________,   KC_MINS,  KC_EQL,  KC_RGUI, KC_DEL,
         KC_TAB,  __________________QWERTY_L1___________________,       __________________QWERTY_R1___________________,   KC_LBRC,  KC_RBRC, KC_BSLS, KC_PGUP,
-        MT_CTL,  __________________QWERTY_L2___________________,       __________________QWERTY_R2___________________,   KC_QUOT,  KC_ENT,           KC_PGDN,
+        MT_CTL,  __________________QWERTY_L2___________________,       __________________QWERTY_R2___________________,   KC_QUOT,  KC_BSPC,          KC_PGDN,
         SC_LSPO, __________________QWERTY_L3___________________, KC_B, __________________QWERTY_R3___________________,   SC_RSPC,           KC_UP,
         KC_LCTL, KC_LALT,  KC_LGUI,           ZZ_SPC,           QK_LEAD,  KC_RGUI,          KC_ENT,            MO(_NUMPAD),        KC_LEFT, KC_DOWN, KC_RGHT),
 

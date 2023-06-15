@@ -15,6 +15,7 @@
  */
 
 #include "fancyalice66.h"
+#include "keyboard.h"
 
 #ifdef RGB_MATRIX_ENABLE
 
@@ -117,10 +118,11 @@ led_config_t g_led_config = {{// It's mirrored
                               // Underglow (66 -> 81)
                               2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}};
 
-__attribute__((weak)) void rgb_matrix_indicators_user(void) {
+__attribute__((weak)) bool rgb_matrix_indicators_user(void) {
     if (host_keyboard_led_state().caps_lock) {
         rgb_matrix_set_color(43, 0xFF, 0xFF, 0xFF);
     }
+    return true;
 }
 
 #endif

@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "config_common.h"
+// #include "config_common.h"
 
 /* firmware shrink settings */
 #define VIAL_COMBO_ENTRIES 2
@@ -40,6 +40,7 @@
 /* RGB Matrix config */
 #define RGB_DI_PIN B0
 #define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_LED_COUNT 82
 
 #ifdef RGB_MATRIX_ENABLE
 #    define DRIVER_LED_TOTAL 82

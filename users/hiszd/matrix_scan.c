@@ -17,9 +17,8 @@ void leader_end_user() {
     if (leader_sequence_one_key(KC_LGUI)) {
         reset_keyboard();
     };
-    if (leader_sequence_one_key(KC_RGUI)) {
-        SEND_STRING("_");
-    };
+
+    // Pwords
     if (leader_sequence_two_keys(KC_P, KC_TAB)) {
         send_string(P1);
     };
@@ -29,6 +28,7 @@ void leader_end_user() {
     if (leader_sequence_two_keys(KC_P, KC_2)) {
         send_string(P3);
     };
+    // Pwords with CR
     if (leader_sequence_three_keys(KC_P, KC_ENT, KC_TAB)) {
         send_string(P1);
         SEND_STRING(SS_TAP(X_ENT));
@@ -41,15 +41,14 @@ void leader_end_user() {
         send_string(P3);
         SEND_STRING(SS_TAP(X_ENT));
     };
-    if (IS_LAYER_ON(1)) {
-        if (leader_sequence_one_key(KC_O)) {
-            SEND_STRING(SS_TAP(X_RIGHT));
-        };
-    } else {
-        if (leader_sequence_one_key(KC_L)) {
-            SEND_STRING(SS_TAP(X_RIGHT));
-        };
-    };
+    // Custom Keycodes and functionality
+    if (leader_sequence_one_key(ZZ_UNWN)) {
+        if (unwn_on) {
+            unwn_on = false;
+        } else {
+            unwn_on = true;
+        }
+    }
     if (leader_sequence_one_key(ZZ_UNDS)) {
         if (unds_unds_on) {
             unds_dash_on = true;

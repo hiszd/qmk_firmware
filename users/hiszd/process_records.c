@@ -15,6 +15,8 @@ bool spc_unds_on = false;
 bool unds_dash_on = false;
 bool unds_unds_on = true;
 
+bool unwn_on = false;
+
 bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case WSPL:
@@ -35,6 +37,25 @@ bool process_record_aux(uint16_t keycode, keyrecord_t *record) {
                 SEND_STRING(SS_UP(X_LGUI));
                 SEND_STRING(SS_UP(X_LCTL));
             } else {
+            }
+            break;
+        case ZZ_UNWN:
+            if (record->event.pressed) {
+                if (!leader_on) {
+                    if (unwn_on) {
+                        register_code16(KC_UNDS);
+                    } else {
+                        register_code(KC_RGUI);
+                    }
+                }
+            } else {
+                if (!leader_on) {
+                    if (unwn_on) {
+                        unregister_code16(KC_UNDS);
+                    } else {
+                        unregister_code(KC_RGUI);
+                    }
+                }
             }
             break;
         case ZZ_UNDS:

@@ -8,6 +8,7 @@ enum custom_keycodes {
     WSPR    = SAFE_RANGE + 1,
     ZZ_SPC  = SAFE_RANGE + 2,
     ZZ_UNDS = SAFE_RANGE + 3,
+    ZZ_UNWN = SAFE_RANGE + 4,
 };
 
 extern bool spc_unds_on;
@@ -15,6 +16,8 @@ extern bool spc_dash_on;
 
 extern bool unds_unds_on;
 extern bool unds_dash_on;
+
+extern bool unwn_on;
 
 bool process_record_aux(uint16_t, keyrecord_t *);
 

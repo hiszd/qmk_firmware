@@ -6,9 +6,7 @@
 
 #pragma once
 
-#ifdef LEADER_ENABLE
 extern bool leader_on;
-#endif /* LEADER_ENABLE */
 
 void matrix_scan_aux(void);
 
